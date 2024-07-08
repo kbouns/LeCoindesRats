@@ -49,6 +49,9 @@ class Deal
     #[ORM\Column(length: 255)]
     private ?string $ImageFilename = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isActive = true;
+
     /**
      * @var Collection<int, Vote>
      */
@@ -164,6 +167,19 @@ class Deal
 
         return $this;
     }
+
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
 
     /**
      * @return Collection<int, Comment>
