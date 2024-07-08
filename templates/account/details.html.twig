@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container my-5">
+    <h1>Mon Compte</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Détails de l'utilisateur</h5>
+            <p class="card-text"><strong>ID :</strong> {{ user.id }}</p>
+            <p class="card-text"><strong>Email :</strong> {{ user.email }}</p>
+            <p class="card-text"><strong>Prénom :</strong> {{ user.firstname }}</p>
+            <p class="card-text"><strong>Nom d'utilisateur :</strong> {{ user.lastname }}</p>
+            <!-- Add more user details here as needed -->
+        </div>
+    </div>
+ 
+    <div class="text-center mt-3">
+        <a href="{{ path('app_account') }}" class="btn btn-primary">Retour Compte</a>
+        <a href="{{ path('app_account_modify') }}" class="btn btn-primary">Modifier mot de passe</a>
+    </div>
+</div>
+{% endblock %}

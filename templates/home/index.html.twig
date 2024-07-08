@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Le coin des Rats{% endblock %}
+
+{% block body %}
+ <div class="row">
+            <div class="col-md-12">
+                {% for deal in deals %}
+                    <div class="card mb-4">
+                        <div class="row no-gutters">
+                            <div class="col-md-3">
+                                {% if deal.imageFilename %}
+                                    <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <img src="https://via.placeholder.com/300x200?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ deal.title }}</h5>
+                                    <p class="card-text">{{ deal.description }}</p>
+                                    <p class="card-text">
+                                        <span class="text-muted"><del>{{ deal.initialPrice|number_format(2, ',', ' ') }} €</del></span>
+                                        <span class="text-danger">{{ deal.reducePrice|number_format(2, ',', ' ') }} €</span>
+                                    </p>
+                                    <p class="card-text"><small class="text-muted">{{ deal.publicationDate|date('Y-m-d') }}</small></p>
+                                    <p class="card-text">
+                                        {% if deal.delivery == 'gratuite' %}
+                                            Livraison : <span class="text-success">Gratuite</span>
+                                        {% elseif deal.delivery == 'payante' %}
+                                            Livraison : <span class="text-warning">Payante</span>
+                                        {% else %}
+                                            Livraison : <span class="text-muted">Non spécifiée</span>
+                                        {% endif %}
+                                    </p>
+                                    <a href="{{ deal.link }}" class="btn btn-primary btn-sm" target="_blank">Voir le deal</a>
+                                    <!-- Ajout du bouton Afficher -->
+                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill">Afficher</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+{% endblock %}

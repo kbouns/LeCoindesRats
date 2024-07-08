@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+    .dashboard-header {
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
+    .dashboard-options {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+    .dashboard-option {
+        margin: 15px;
+        text-align: center;
+        flex: 1 0 30%;
+        max-width: 30%;
+    }
+    .dashboard-option .card {
+        border: none;
+        transition: transform 0.3s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .dashboard-option .card:hover {
+        transform: scale(1.05);
+    }
+    .dashboard-option .card-body {
+        background: #f8f9fa;
+        color: #333;
+        border-radius: 5px;
+        padding: 20px;
+    }
+    .dashboard-option .btn {
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="dashboard-header">
+        <h1>Espace Membre Privée</h1>
+    </div>
+    <div class="dashboard-options">
+        <div class="dashboard-option">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Profil</h5>
+                    <p class="card-text">Voir et modifier votre profil.</p>
+                    <a href="{{ path('app_account_details') }}" class="btn btn-primary">Aller au profil</a>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-option">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Paramètres</h5>
+                    <p class="card-text">Gérer les paramètres de votre compte.</p>
+                    <a href="#" class="btn btn-primary">Aller aux paramètres</a>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-option">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Mot de passe</h5>
+                    <p class="card-text">Modifier votre mot de passe.</p>
+                    <a href="{{ path('app_account_modify') }}" class="btn btn-primary">Modifier mot de passe</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <a href="{{ path('app_home') }}" class="btn btn-primary">Retour Accueil</a>
+    </div>
+</div>
+{% endblock %}

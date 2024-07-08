@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1>Modifier le Deal</h1>
+
+        {% for label, messages in app.flashes %}
+            <div class="alert alert-{{ label }}">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+        <div class="mb-3">
+            {{ form_label(form.title, 'Titre du Deal', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.title, { 'attr': { 'class': 'form-control' } }) }}
+            {{ form_errors(form.title) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.description, { 'attr': { 'class': 'form-control' } }) }}
+            {{ form_errors(form.description) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.initial_price, 'Prix Initial', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.initial_price, { 'attr': { 'class': 'form-control' } }) }}
+            {{ form_errors(form.initial_price) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.reduce_price, 'Prix Réduit', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.reduce_price, { 'attr': { 'class': 'form-control' } }) }}
+            {{ form_errors(form.reduce_price) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.publication_date, 'Date de Publication', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.publication_date, { 'attr': { 'class': 'form-control' } }) }}
+            {{ form_errors(form.publication_date) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.link, 'Lien', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.link, { 'attr': { 'class': 'form-control' } }) }}
+            {{ form_errors(form.link) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.imageFilename, 'Image (JPEG, PNG file)', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.imageFilename, { 'attr': { 'class': 'form-control' } }) }}
+            {{ form_errors(form.imageFilename) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.Delivery, 'Livraison', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.Delivery, { 'attr': { 'class': 'form-select' } }) }}
+            {{ form_errors(form.Delivery) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        {{ form_end(form) }}
+
+        <a href="{{ path('deal_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+    </div>
+{% endblock %}
