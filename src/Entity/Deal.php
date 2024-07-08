@@ -145,14 +145,22 @@ class Deal
         return $this;
     }
 
-    public function getIdUser(): ?User
+/**
+     * Get the value of User
+     */ 
+    public function getUser()
     {
-        return $this->idUser;
+        return $this->User;
     }
 
-    public function setIdUser(?User $idUser): static
+    /**
+     * Set the value of User
+     *
+     * @return  self
+     */ 
+    public function setUser($User)
     {
-        $this->idUser = $idUser;
+        $this->User = $User;
 
         return $this;
     }

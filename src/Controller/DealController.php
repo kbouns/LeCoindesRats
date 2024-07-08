@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-use App\Entity\User;
+
 use App\Entity\Deal;
 use App\Form\DealType;
 use App\Repository\DealRepository;
@@ -54,7 +54,7 @@ class DealController extends AbstractController
             }
 
             // Set the current user as the author of the deal
-            $deal->setIdUser($this->getUser());
+            $deal->setUser($this->getUser());
 
             $entityManager->persist($deal);
             $entityManager->flush();
