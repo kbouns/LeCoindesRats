@@ -53,20 +53,20 @@
                         <p class="card-text" style="text-align: left;">{{ deal.description }}</p>
                     </div>
                 </div>
-                <!-- Comment Section -->
+
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Commentaires</h5>
                         {% if deal.comments|length > 0 %}
                             {% for comment in deal.comments %}
                                 <div class="mb-2">
-                                    <p><strong>{{ comment.User.email }}</strong> <small class="text-muted">{{ comment.commenttime|date('Y-m-d H:i') }}</small></p>
+                                    <p><strong>{{ comment.User ? comment.User.email : 'Utilisateur inconnu' }}</strong> <small class="text-muted">{{ comment.commenttime|date('Y-m-d H:i') }}</small></p>
                                     <p>{{ comment.content }}</p>
                                     <a href="{{ path('comment_reply', {'dealId': deal.id, 'commentId': comment.id}) }}" class="btn btn-sm btn-outline-primary">Répondre</a>
                                     <hr>
                                     {% for reply in comment.comments %}
                                         <div class="ml-4">
-                                            <p><strong>{{ reply.User.email }}</strong> <small class="text-muted">{{ reply.commenttime|date('Y-m-d H:i') }}</small></p>
+                                            <p><strong>{{ reply.User ? reply.User.email : 'Utilisateur inconnu' }}</strong> <small class="text-muted">{{ reply.commenttime|date('Y-m-d H:i') }}</small></p>
                                             <p>{{ reply.content }}</p>
                                         </div>
                                     {% endfor %}
@@ -78,15 +78,21 @@
                     </div>
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Ajouter un commentaire</h5>
-                        {{ form_start(form) }}
-                            {{ form_widget(form) }}
-                            <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
-                        {{ form_end(form) }}
+                {% if is_granted('ROLE_USER') %}
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Ajouter un commentaire</h5>
+                            {{ form_start(form) }}
+                                {{ form_widget(form) }}
+                                <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
+                            {{ form_end(form) }}
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Attention!</strong> Vous devez être connecté pour ajouter un commentaire.
+                    </div>
+                {% endif %}
                 <a href="{{ path('deal_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
             </div>
         </div>
