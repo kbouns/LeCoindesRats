@@ -62,7 +62,7 @@
                                 <div class="mb-2">
                                     <p><strong>{{ comment.User.email }}</strong> <small class="text-muted">{{ comment.commenttime|date('Y-m-d H:i') }}</small></p>
                                     <p>{{ comment.content }}</p>
-                                    <a href="{{ path('comment_reply', {'id': deal.id, 'commentId': comment.id}) }}" class="btn btn-sm btn-outline-primary">Répondre</a>
+                                    <a href="{{ path('comment_reply', {'dealId': deal.id, 'commentId': comment.id}) }}" class="btn btn-sm btn-outline-primary">Répondre</a>
                                     <hr>
                                     {% for reply in comment.comments %}
                                         <div class="ml-4">
@@ -77,7 +77,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <!-- Add Comment Form -->
+
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Ajouter un commentaire</h5>

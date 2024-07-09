@@ -5,16 +5,12 @@ namespace App\Controller;
 use App\Entity\Deal;
 use App\Entity\Comment;
 use App\Form\CommentType;
-use App\Form\DealType;
-use App\Repository\DealRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class DealController extends AbstractController
 {
@@ -147,34 +143,5 @@ class DealController extends AbstractController
         }
 
         return $this->redirectToRoute('app_account_deal_history');
-    }
-
-    #[Route('/deal/{id}/comment/{commentId}/reply', name: 'comment_reply', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function reply(Request $request, Deal $deal, Comment $comment, EntityManagerInterface $entityManager): Response
-    {
-        $reply = new Comment();
-        $form = $this->createForm(CommentType::class, $reply);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $reply->setUser($this->getUser());
-            $reply->setDeal($deal);
-            $reply->setCommenttime(new \DateTime());
-            $reply->setCommentaire($comment);
-
-            $entityManager->persist($reply);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Réponse ajoutée avec succès.');
-
-            return $this->redirectToRoute('deal_show', ['id' => $deal->getId()]);
-        }
-
-        return $this->render('comment/reply.html.twig', [
-            'form' => $form->createView(),
-            'deal' => $deal,
-            'comment' => $comment,
-        ]);
     }
 }

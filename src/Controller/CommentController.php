@@ -40,4 +40,40 @@ class CommentController extends AbstractController
             'deal' => $deal,
         ]);
     }
+
+    #[Route('/deal/{dealId}/comment/{commentId}/reply', name: 'comment_reply', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function reply(Request $request, EntityManagerInterface $entityManager, $dealId, $commentId): Response
+    {
+        $deal = $entityManager->getRepository(Deal::class)->find($dealId);
+        $comment = $entityManager->getRepository(Comment::class)->find($commentId);
+
+        if (!$deal || !$comment) {
+            throw $this->createNotFoundException('Deal or Comment not found.');
+        }
+
+        $reply = new Comment();
+        $form = $this->createForm(CommentType::class, $reply);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $reply->setUser($this->getUser());
+            $reply->setDeal($deal);
+            $reply->setCommenttime(new \DateTime());
+            $reply->setCommentaire($comment);
+
+            $entityManager->persist($reply);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Réponse ajoutée avec succès.');
+
+            return $this->redirectToRoute('deal_show', ['id' => $deal->getId()]);
+        }
+
+        return $this->render('comment/reply.html.twig', [
+            'form' => $form->createView(),
+            'deal' => $deal,
+            'comment' => $comment,
+        ]);
+    }
 }
