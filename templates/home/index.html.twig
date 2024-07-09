@@ -4,9 +4,9 @@
 
 {% block body %}
     <div class="container my-5">
-        <div class="d-flex justify-content-start mb-4">
+        <div class="category-scroll-container d-flex justify-content-start mb-4">
             {% for category in get1stLevelCategories() %}
-                <a href="{{ path('app_categorie_show', {'id': category.id}) }}" class="btn btn-dark me-2">
+                <a href="{{ path('app_categorie_show', {'id': category.id}) }}" class="btn btn-dark me-2 category-item">
                     {{ category.nameCategory }}
                 </a>
             {% endfor %}
@@ -54,7 +54,7 @@
                                                     <span class="badge bg-secondary">{{ category.nameCategory }}</span>
                                                 {% endfor %}
                                             {% else %}
-                                                <span class="text-muted">Aucune catégorie</span>
+                                                <span class="text-muted"></span>
                                             {% endif %}
                                         </p>
                                     </div>

@@ -12,27 +12,36 @@
                 <th scope="col">Prix Initial</th>
                 <th scope="col">Prix Réduit</th>
                 <th scope="col">Date Publication</th>
-                <th scope="col">Le Deal est-il actif ?</th>
-                <th scope="col">Activé ou Désactivé</th>
+        <th scope="col" class="text-center">Le Deal est-il actif ?</th>
+        <th scope="col" class="text-center">Actions</th>
             </tr>
         </thead>
-        <tbody>
-            {% for deal in deals %}
-                <tr>
-                    <td>{{ deal.title }}</td>
-                    <td>{{ deal.description }}</td>
-                    <td>{{ deal.initialprice }}</td>
-                    <td>{{ deal.reduceprice }}</td>
-                    <td>{{ deal.publicationdate|date('Y-m-d H:i') }}</td>
-                    <td class="text-center">{{ deal.isActive ? 'Oui' : 'Non' }}</td>
-                    <td class="text-center">
-                        <a href="{{ path('app_account_toggle_deal', {'id': deal.id}) }}" class="btn btn-sm {{ deal.isActive ? 'btn-danger' : 'btn-success' }}">
-                            {{ deal.isActive ? 'Désactiver' : 'Activer' }}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
+       <tbody>
+    {% for deal in deals %}
+        <tr>
+            <td>{{ deal.title }}</td>
+            <td>{{ deal.description }}</td>
+            <td>{{ deal.initialprice }}</td>
+            <td>{{ deal.reduceprice }}</td>
+            <td>{{ deal.publicationdate|date('Y-m-d') }}</td>
+            <td class="text-center">{{ deal.isActive ? 'Oui' : 'Non' }}</td>
+            <td class="text-center">
+                <a href="{{ path('app_account_toggle_deal', {'id': deal.id}) }}" class="btn btn-sm {{ deal.isActive ? 'btn-danger' : 'btn-success' }} me-2 mb-2">
+                    {{ deal.isActive ? 'Désactiver' : 'Activer' }}
+                </a>
+                <a href="{{ path('deal_edit', {'id': deal.id}) }}" class="btn btn-sm btn-primary me-2 mb-2">Modifier le deal</a>
+                <form method="post" action="{{ path('deal_delete', {'id': deal.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce deal ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ deal.id) }}">
+                    <button class="btn btn-sm btn-danger mb-2">Supprimer le deal</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
     </table>
+
+    <div class="text-center mt-3">
+        <a href="{{ path('app_account') }}" class="btn btn-primary">Retour Compte</a>
+    </div>
 </div>
 {% endblock %}

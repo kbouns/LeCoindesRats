@@ -65,3 +65,13 @@ body {
 .inactive_card {
     filter: opacity(75%) grayscale(100%);
 }
+
+.category-scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.category-item {
+    display: inline-block;
+    transition: transform 0.3s, font-size 0.3s;
+}
