@@ -15,30 +15,30 @@
         <div class="row">
             <div class="col-md-12">
                 {% for deal in deals %}
-                    <div class="card mb-4 {{ deal.isActive == '0' ? 'inactive_card' : '' }}">
+                    <div class="card mb-2 {{ deal.isActive == '0' ? 'inactive_card' : '' }}" style="max-width: 1200px;">
                         <div class="row no-gutters">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 {% if deal.imageFilename %}
                                     <a href="{{ path('deal_show', {id: deal.id}) }}">
                                         <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
                                     </a>
                                 {% else %}
                                     <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                        <img src="https://via.placeholder.com/300x200?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                        <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
                                     </a>
                                 {% endif %}
                             </div>
                             <div class="col-md-8">
                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <h5 class="card-title">{{ deal.title }}</h5>
-                                        <p class="card-text">{{ deal.description }}</p>
-                                        <p class="card-text">
+                                        <p class="card-text mb-1">{{ deal.description }}</p>
+                                        <p class="card-text mb-1">
                                             <span class="text-muted"><del>{{ deal.initialPrice|number_format(2, ',', ' ') }} €</del></span>
                                             <span class="text-danger">{{ deal.reducePrice|number_format(2, ',', ' ') }} €</span>
                                         </p>
-                                        <p class="card-text"><small class="text-muted">{{ deal.publicationDate|date('Y-m-d') }}</small></p>
-                                        <p class="card-text">
+                                        <p class="card-text mb-1"><small class="text-muted">{{ deal.publicationDate|date('Y-m-d') }}</small></p>
+                                        <p class="card-text mb-1">
                                             {% if deal.delivery == 'gratuite' %}
                                                 Livraison : <span class="text-success">Gratuite</span>
                                             {% elseif deal.delivery == 'payante' %}
@@ -47,7 +47,7 @@
                                                 Livraison : <span class="text-muted">Non spécifiée</span>
                                             {% endif %}
                                         </p>
-                                        <p class="card-text">
+                                        <p class="card-text mb-1">
                                             Catégories :
                                             {% if deal.categorie|length > 0 %}
                                                 {% for category in deal.categorie %}
@@ -57,12 +57,15 @@
                                                 <span class="text-muted"></span>
                                             {% endif %}
                                         </p>
+                                        <div class="d-flex justify-content-end mt-2">
+                                            <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
+                                            <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2">
+                                                <img src="{{ asset('images/conversation.jpg') }}" alt="Commentaires" style="height: 20px; width: 20px;">
+                                                {{ deal.comments|length }} Commentaires
+                                            </a>
+                                        </div>
                                     </div>
                                 </a>
-                                <div class="card-body">
-                                    <a href="{{ deal.link }}" class="btn btn-primary btn-sm" target="_blank">Voir le deal</a>
-                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill">Afficher</a>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ deal.title }}{% endblock %}
+
 {% block body %}
     <div class="container my-5">
         <div class="row">
@@ -51,11 +53,38 @@
                         <p class="card-text" style="text-align: left;">{{ deal.description }}</p>
                     </div>
                 </div>
+                <!-- Comment Section -->
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Commentaires</h5>
-
-                        <p class="card-text text-left">Aucun commentaire pour le moment.</p>
+                        {% if deal.comments|length > 0 %}
+                            {% for comment in deal.comments %}
+                                <div class="mb-2">
+                                    <p><strong>{{ comment.User.email }}</strong> <small class="text-muted">{{ comment.commenttime|date('Y-m-d H:i') }}</small></p>
+                                    <p>{{ comment.content }}</p>
+                                    <a href="{{ path('comment_reply', {'id': deal.id, 'commentId': comment.id}) }}" class="btn btn-sm btn-outline-primary">Répondre</a>
+                                    <hr>
+                                    {% for reply in comment.comments %}
+                                        <div class="ml-4">
+                                            <p><strong>{{ reply.User.email }}</strong> <small class="text-muted">{{ reply.commenttime|date('Y-m-d H:i') }}</small></p>
+                                            <p>{{ reply.content }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="card-text text-left">Aucun commentaire pour le moment.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Add Comment Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Ajouter un commentaire</h5>
+                        {{ form_start(form) }}
+                            {{ form_widget(form) }}
+                            <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
+                        {{ form_end(form) }}
                     </div>
                 </div>
                 <a href="{{ path('deal_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>

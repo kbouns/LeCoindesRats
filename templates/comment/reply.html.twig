@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Répondre au commentaire{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1>Répondre au commentaire</h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <p><strong>{{ comment.User.email }}</strong> <small class="text-muted">{{ comment.commenttime|date('Y-m-d H:i') }}</small></p>
+                <p>{{ comment.content }}</p>
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary mt-3">Répondre</button>
+        {{ form_end(form) }}
+
+        <a href="{{ path('deal_show', {'id': deal.id}) }}" class="btn btn-secondary mt-3">Retour au deal</a>
+    </div>
+{% endblock %}
