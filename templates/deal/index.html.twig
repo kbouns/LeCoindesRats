@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-12">
                 {% for deal in deals %}
-                   <div class="card mb-4 {{ deal.isActive == 'true' ? 'inactive_card' : '' }}">
+                    <div class="card mb-4 {{ deal.isActive == '0' ? 'inactive_card' : '' }}">
                         <div class="row no-gutters">
                             <div class="col-md-3">
                                 {% if deal.imageFilename %}
@@ -42,9 +42,19 @@
                                             Livraison : <span class="text-muted">Non spécifiée</span>
                                         {% endif %}
                                     </p>
+
+                                    <p class="card-text">
+                                        Catégories :
+                                        {% if deal.categorie|length > 0 %}
+                                            {% for category in deal.categorie %}
+                                                <span class="badge bg-secondary">{{ category.nameCategory }}</span>
+                                            {% endfor %}
+                                        {% else %}
+                                            <span class="text-muted"></span>
+                                        {% endif %}
+                                    </p>
                                     <a href="{{ deal.link }}" class="btn btn-primary btn-sm" target="_blank">Voir le deal</a>
                                     <a href="{{ path('deal_edit', {id: deal.id}) }}" class="btn btn-primary btn-sm rounded-pill">Modifier</a>
-                                    <!-- Ajout du bouton Afficher -->
                                     <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill">Afficher</a>
                                 </div>
                             </div>

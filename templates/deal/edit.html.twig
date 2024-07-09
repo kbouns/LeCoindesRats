@@ -53,6 +53,11 @@
             {{ form_widget(form.Delivery, { 'attr': { 'class': 'form-select' } }) }}
             {{ form_errors(form.Delivery) }}
         </div>
+        <div class="mb-3">
+            {{ form_label(form.Categorie, 'Catégories', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.Categorie, { 'attr': { 'class': 'form-check' } }) }}
+            {{ form_errors(form.Categorie) }}
+        </div>
         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
         {{ form_end(form) }}
 

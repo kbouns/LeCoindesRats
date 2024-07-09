@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Historique de mes Deals</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Description</th>
+                <th scope="col">Prix Initial</th>
+                <th scope="col">Prix Réduit</th>
+                <th scope="col">Date Publication</th>
+                <th scope="col">Le Deal est-il actif ?</th>
+                <th scope="col">Activé ou Désactivé</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for deal in deals %}
+                <tr>
+                    <td>{{ deal.title }}</td>
+                    <td>{{ deal.description }}</td>
+                    <td>{{ deal.initialprice }}</td>
+                    <td>{{ deal.reduceprice }}</td>
+                    <td>{{ deal.publicationdate|date('Y-m-d H:i') }}</td>
+                    <td class="text-center">{{ deal.isActive ? 'Oui' : 'Non' }}</td>
+                    <td class="text-center">
+                        <a href="{{ path('app_account_toggle_deal', {'id': deal.id}) }}" class="btn btn-sm {{ deal.isActive ? 'btn-danger' : 'btn-success' }}">
+                            {{ deal.isActive ? 'Désactiver' : 'Activer' }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

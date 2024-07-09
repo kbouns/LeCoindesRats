@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1>Liste des Catégories</h1>
+        <a href="{{ path('app_categorie_new') }}" class="btn btn-primary mb-3">Créer une nouvelle catégorie</a>
+        <ul class="list-group">
+            {% for category in categories %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ category.nameCategory }}
+                    <div>
+                        <a href="{{ path('app_categorie_show', {id: category.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                        <a href="{{ path('app_categorie_edit', {id: category.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        <form method="post" action="{{ path('app_categorie_delete', {id: category.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                            <button class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

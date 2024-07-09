@@ -5,7 +5,7 @@
 namespace App\Form;
 
 use App\Entity\Deal;
-use App\Entity\Categorie;
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -15,8 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class DealType extends AbstractType
 {
@@ -55,6 +53,14 @@ class DealType extends AbstractType
                     'Livraison payante' => 'payante',
                 ],
                 'placeholder' => 'Choisissez une option de livraison',
+                'attr' => ['class' => 'form-select'] 
+            ])
+            ->add('Categorie', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'nameCategory',
+                'placeholder' => 'Choisissez une ou plusieurs catégories',
+                'multiple' => true,
+                'expanded' => true, 
                 'attr' => ['class' => 'form-select'] 
             ]);
     }
