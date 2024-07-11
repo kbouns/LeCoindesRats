@@ -63,7 +63,7 @@ class AccountController extends AbstractController
     {
         $user = $this->getUser();
 
-        $deals = $entityManager->getRepository(Deal::class)->findBy(['User' => $user]);
+        $deals = $entityManager->getRepository(Deal::class)->findBy(['user' => $user]);
 
         return $this->render('account/deal_history.html.twig', [
             'deals' => $deals

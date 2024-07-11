@@ -1,10 +1,13 @@
 <?php
 
+// src/Controller/CommentController.php
+
 namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Deal;
 use App\Form\CommentType;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,9 +17,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CommentController extends AbstractController
 {
-    #[Route('/deal/{id}/comment/new', name: 'comment_new')]
-    #[IsGranted('ROLE_USER')]
-    public function new(Request $request, Deal $deal, EntityManagerInterface $entityManager): Response
+    #[Route('/deal/{id}', name: 'deal_show', methods: ['GET', 'POST'])]
+    public function show(Deal $deal, Request $request, EntityManagerInterface $entityManager, CommentRepository $commentRepository): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
@@ -25,7 +27,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setUser($this->getUser());
             $comment->setDeal($deal);
-            $comment->setCommenttime(new \DateTime());
+            $comment->setCommenttime(new \DateTime()); 
 
             $entityManager->persist($comment);
             $entityManager->flush();
@@ -35,21 +37,29 @@ class CommentController extends AbstractController
             return $this->redirectToRoute('deal_show', ['id' => $deal->getId()]);
         }
 
-        return $this->render('comment/new.html.twig', [
-            'form' => $form->createView(),
+      
+        $comments = $commentRepository->findBy(['Deal' => $deal, 'parent' => null]);
+
+        return $this->render('deal/show.html.twig', [
             'deal' => $deal,
+            'form' => $form->createView(),
+            'comments' => $comments,
         ]);
     }
 
     #[Route('/deal/{dealId}/comment/{commentId}/reply', name: 'comment_reply', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
-    public function reply(Request $request, EntityManagerInterface $entityManager, $dealId, $commentId): Response
+    public function reply(Request $request, EntityManagerInterface $entityManager, int $dealId, int $commentId): Response
     {
         $deal = $entityManager->getRepository(Deal::class)->find($dealId);
         $comment = $entityManager->getRepository(Comment::class)->find($commentId);
 
-        if (!$deal || !$comment) {
-            throw $this->createNotFoundException('Deal or Comment not found.');
+        if (!$deal) {
+            throw $this->createNotFoundException('Deal not found.');
+        }
+
+        if (!$comment) {
+            throw $this->createNotFoundException('Comment not found.');
         }
 
         $reply = new Comment();
@@ -59,8 +69,8 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $reply->setUser($this->getUser());
             $reply->setDeal($deal);
-            $reply->setCommenttime(new \DateTime());
-            $reply->setCommentaire($comment);
+            $reply->setCommenttime(new \DateTime()); 
+            $reply->setParent($comment);
 
             $entityManager->persist($reply);
             $entityManager->flush();

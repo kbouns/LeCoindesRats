@@ -20,26 +20,26 @@ class Comment
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $commenttime = null;
+    private ?\DateTimeInterface $commentTime = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    private ?User $User = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    private ?Deal $Deal = null;
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Deal $deal = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]
-    private ?self $Commentaire = null;
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'replies')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    private ?self $parent = null;
 
-    /**
-     * @var Collection<int, self>
-     */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'Commentaire')]
-    private Collection $comments;
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class, cascade: ['persist', 'remove'])]
+    private Collection $replies;
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
+        $this->replies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,50 +59,50 @@ class Comment
         return $this;
     }
 
-    public function getCommenttime(): ?\DateTimeInterface
+    public function getCommentTime(): ?\DateTimeInterface
     {
-        return $this->commenttime;
+        return $this->commentTime;
     }
 
-    public function setCommenttime(\DateTimeInterface $commenttime): static
+    public function setCommentTime(\DateTimeInterface $commentTime): static
     {
-        $this->commenttime = $commenttime;
+        $this->commentTime = $commentTime;
 
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getDeal(): ?Deal
     {
-        return $this->Deal;
+        return $this->deal;
     }
 
-    public function setDeal(?Deal $Deal): static
+    public function setDeal(?Deal $deal): static
     {
-        $this->Deal = $Deal;
+        $this->deal = $deal;
 
         return $this;
     }
 
-    public function getCommentaire(): ?self
+    public function getParent(): ?self
     {
-        return $this->Commentaire;
+        return $this->parent;
     }
 
-    public function setCommentaire(?self $Commentaire): static
+    public function setParent(?self $parent): static
     {
-        $this->Commentaire = $Commentaire;
+        $this->parent = $parent;
 
         return $this;
     }
@@ -110,27 +110,27 @@ class Comment
     /**
      * @return Collection<int, self>
      */
-    public function getComments(): Collection
+    public function getReplies(): Collection
     {
-        return $this->comments;
+        return $this->replies;
     }
 
-    public function addComment(self $comment): static
+    public function addReply(self $reply): static
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setCommentaire($this);
+        if (!$this->replies->contains($reply)) {
+            $this->replies->add($reply);
+            $reply->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeComment(self $comment): static
+    public function removeReply(self $reply): static
     {
-        if ($this->comments->removeElement($comment)) {
+        if ($this->replies->removeElement($reply)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getCommentaire() === $this) {
-                $comment->setCommentaire(null);
+            if ($reply->getParent() === $this) {
+                $reply->setParent(null);
             }
         }
 

@@ -13,7 +13,7 @@
         {% endfor %}
 
         {{ form_start(form) }}
-        <div class="mb-3">
+        <div class="mb-3">  
             {{ form_label(form.title, 'Titre du Deal', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(form.title, { 'attr': { 'class': 'form-control' } }) }}
             {{ form_errors(form.title) }}

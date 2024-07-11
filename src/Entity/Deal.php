@@ -35,40 +35,31 @@ class Deal
     private ?string $link = null;
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
-    private ?User $User = null;
+    private ?User $user = null;
 
-    /**
-     * @var Collection<int, Comment>
-     */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'Deal')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'deal')]
     private Collection $comments;
 
     #[ORM\Column(length: 255)]
-    private ?string $Delivery = null;
+    private ?string $delivery = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $ImageFilename = null;
+    private ?string $imageFilename = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isActive = true;
 
-    /**
-     * @var Collection<int, Vote>
-     */
-    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'Deal')]
+    #[ORM\OneToMany(targetEntity: Vote::class, mappedBy: 'deal', cascade: ['remove'], orphanRemoval: true)]
     private Collection $votes;
 
-    /**
-     * @var Collection<int, Category>
-     */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'deals')]
-    private Collection $Categorie;
+    private Collection $categorie;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->votes = new ArrayCollection();
-        $this->Categorie = new ArrayCollection();
+        $this->categorie = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,22 +139,14 @@ class Deal
         return $this;
     }
 
-/**
-     * Get the value of User
-     */ 
-    public function getUser()
+    public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    /**
-     * Set the value of User
-     *
-     * @return  self
-     */ 
-    public function setUser($User)
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
@@ -180,10 +163,6 @@ class Deal
         return $this;
     }
 
-
-    /**
-     * @return Collection<int, Comment>
-     */
     public function getComments(): Collection
     {
         return $this->comments;
@@ -202,7 +181,6 @@ class Deal
     public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
             if ($comment->getDeal() === $this) {
                 $comment->setDeal(null);
             }
@@ -213,31 +191,28 @@ class Deal
 
     public function getDelivery(): ?string
     {
-        return $this->Delivery;
+        return $this->delivery;
     }
 
-    public function setDelivery(string $Delivery): static
+    public function setDelivery(string $delivery): static
     {
-        $this->Delivery = $Delivery;
+        $this->delivery = $delivery;
 
         return $this;
     }
 
     public function getImageFilename(): ?string
     {
-        return $this->ImageFilename;
+        return $this->imageFilename;
     }
 
-    public function setImageFilename(string $ImageFilename): static
+    public function setImageFilename(string $imageFilename): static
     {
-        $this->ImageFilename = $ImageFilename;
+        $this->imageFilename = $imageFilename;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Vote>
-     */
     public function getVotes(): Collection
     {
         return $this->votes;
@@ -256,7 +231,6 @@ class Deal
     public function removeVote(Vote $vote): static
     {
         if ($this->votes->removeElement($vote)) {
-            // set the owning side to null (unless already changed)
             if ($vote->getDeal() === $this) {
                 $vote->setDeal(null);
             }
@@ -265,18 +239,15 @@ class Deal
         return $this;
     }
 
-    /**
-     * @return Collection<int, Category>
-     */
     public function getCategorie(): Collection
     {
-        return $this->Categorie;
+        return $this->categorie;
     }
 
     public function addCategorie(Category $categorie): static
     {
-        if (!$this->Categorie->contains($categorie)) {
-            $this->Categorie->add($categorie);
+        if (!$this->categorie->contains($categorie)) {
+            $this->categorie->add($categorie);
         }
 
         return $this;
@@ -284,7 +255,7 @@ class Deal
 
     public function removeCategorie(Category $categorie): static
     {
-        $this->Categorie->removeElement($categorie);
+        $this->categorie->removeElement($categorie);
 
         return $this;
     }

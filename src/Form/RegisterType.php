@@ -18,6 +18,12 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        ->add('Username', TextType::class, [
+            'label' => 'Ton surnom :',
+            'attr' => [
+                'placeholder' => 'Veuillez renseigner votre Tag/surnom!'
+            ]
+        ])
         ->add('firstname', TextType::class, [
             'label' => 'Prénom :',
             'attr' => [

@@ -4,18 +4,28 @@
 
 {% block body %}
     <div class="container my-5">
-        <div class="category-scroll-container d-flex justify-content-start mb-4">
-            {% for category in get1stLevelCategories() %}
-                <a href="{{ path('app_categorie_show', {'id': category.id}) }}" class="btn btn-dark me-2 category-item">
-                    {{ category.nameCategory }}
-                </a>
-            {% endfor %}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <button class="btn btn-dark btn-sm me-4" id="scroll-left">
+                &laquo;
+            </button>
+            <div class="category-scroll-container d-flex flex-grow-1 justify-content-start mx-2">
+                {% for category in get1stLevelCategories() %}
+                    <a href="{{ path('app_categorie_show', {'id': category.id}) }}" class="btn btn-dark me-2 category-item">
+                        {{ category.nameCategory }}
+                    </a>
+                {% endfor %}
+            </div>
+            <button class="btn btn-dark btn-sm ms-4" id="scroll-right">
+                &raquo;
+            </button>
         </div>
-        
         <div class="row">
             <div class="col-md-12">
-                {% for deal in deals %}
-                    <div class="card mb-2 {{ deal.isActive == '0' ? 'inactive_card' : '' }}" style="max-width: 1200px;">
+                {% for dealWithVotes in dealsWithVotes %}
+                    {% set deal = dealWithVotes.deal %}
+                    {% set upvotes = dealWithVotes.upvotes %}
+                    {% set downvotes = dealWithVotes.downvotes %}
+                    <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="max-width: 1200px;">
                         <div class="row no-gutters">
                             <div class="col-md-4">
                                 {% if deal.imageFilename %}
@@ -31,13 +41,27 @@
                             <div class="col-md-8">
                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
                                     <div class="card-body p-2">
+                                        <br>
+                                        <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
+                                            <input type="hidden" name="vote_type" value="upvote">
+                                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                                Bons Rats <span class="badge bg-light text-dark" id="upvotes-{{ deal.id }}">{{ upvotes }}</span>
+                                            </button>
+                                        </form>
+                                        <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
+                                            <input type="hidden" name="vote_type" value="downvote">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                Mauvais Rats <span class="badge bg-light text-dark" id="downvotes-{{ deal.id }}">{{ downvotes }}</span>
+                                            </button>
+                                        </form>
+                                        <br><br>
                                         <h5 class="card-title">{{ deal.title }}</h5>
                                         <p class="card-text mb-1">{{ deal.description }}</p>
                                         <p class="card-text mb-1">
-                                            <span class="text-muted"><del>{{ deal.initialPrice|number_format(2, ',', ' ') }} €</del></span>
-                                            <span class="text-danger">{{ deal.reducePrice|number_format(2, ',', ' ') }} €</span>
+                                            <span class="text-muted"><del>{{ deal.initialprice|number_format(2, ',', ' ') }} €</del></span>
+                                            <span class="text-danger">{{ deal.reduceprice|number_format(2, ',', ' ') }} €</span>
                                         </p>
-                                        <p class="card-text mb-1"><small class="text-muted">{{ deal.publicationDate|date('Y-m-d') }}</small></p>
+                                        <p class="card-text mb-1"><small class="text-muted">{{ deal.publicationdate|date('Y-m-d') }}</small></p>
                                         <p class="card-text mb-1">
                                             {% if deal.delivery == 'gratuite' %}
                                                 Livraison : <span class="text-success">Gratuite</span>
@@ -54,7 +78,14 @@
                                                     <span class="badge bg-secondary">{{ category.nameCategory }}</span>
                                                 {% endfor %}
                                             {% else %}
-                                                <span class="text-muted"></span>
+                                                <span class="text-muted">Aucune catégorie</span>
+                                            {% endif %}
+                                        </p>
+                                        <p class="card-text mb-1">
+                                            {% if deal.user %}
+                                                Publié par : <strong>{{ deal.user.username }}</strong>
+                                            {% else %}
+                                                Publié par : <strong>Utilisateur inconnu</strong>
                                             {% endif %}
                                         </p>
                                         <div class="d-flex justify-content-end mt-2">
@@ -73,4 +104,47 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const voteForms = document.querySelectorAll('.vote-form');
+            
+            voteForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    const dealId = form.dataset.dealId;
+                    const voteType = form.querySelector('input[name="vote_type"]').value;
+                    const formData = new FormData();
+                    formData.append('vote_type', voteType);
+
+                    fetch(`/deal/${dealId}/vote`, {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            document.getElementById(`upvotes-${dealId}`).textContent = data.upvotes;
+                            document.getElementById(`downvotes-${dealId}`).textContent = data.downvotes;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+
+            const scrollContainer = document.querySelector('.category-scroll-container');
+            document.getElementById('scroll-left').addEventListener('click', () => {
+                scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+            });
+            document.getElementById('scroll-right').addEventListener('click', () => {
+                scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+            });
+        });
+    </script>
 {% endblock %}

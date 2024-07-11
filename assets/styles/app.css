@@ -62,16 +62,39 @@ body {
 .form-control {
     border-radius: 10px;
 }
+
 .inactive_card {
     filter: opacity(75%) grayscale(100%);
 }
 
 .category-scroll-container {
-    overflow-x: auto;
-    white-space: nowrap;
+    overflow-x: hidden;
+    }
+.category-scroll-container {
+    overflow-x: hidden; 
+    display: flex;
+    align-items: center;
+    scroll-behavior: smooth;
 }
 
 .category-item {
     display: inline-block;
     transition: transform 0.3s, font-size 0.3s;
+    white-space: nowrap;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+.btn-dark {
+    background-color: #343a40;
+    border: none;
+}
+
+.btn-dark:hover {
+    background-color: #23272b;
 }

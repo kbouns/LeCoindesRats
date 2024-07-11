@@ -13,52 +13,52 @@ class Vote
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?bool $TypeVote = null;
+    #[ORM\Column(type: 'string', length: 10)]
+    private ?string $typeVote = null;
 
     #[ORM\ManyToOne(inversedBy: 'votes')]
-    private ?Deal $Deal = null;
+    private ?Deal $deal = null;
 
     #[ORM\ManyToOne(inversedBy: 'votes')]
-    private ?User $User = null;
+    private ?User $user = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function isTypeVote(): ?bool
+    public function getTypeVote(): ?string
     {
-        return $this->TypeVote;
+        return $this->typeVote;
     }
 
-    public function setTypeVote(bool $TypeVote): static
+    public function setTypeVote(string $typeVote): static
     {
-        $this->TypeVote = $TypeVote;
+        $this->typeVote = $typeVote;
 
         return $this;
     }
 
     public function getDeal(): ?Deal
     {
-        return $this->Deal;
+        return $this->deal;
     }
 
-    public function setDeal(?Deal $Deal): static
+    public function setDeal(?Deal $deal): static
     {
-        $this->Deal = $Deal;
+        $this->deal = $deal;
 
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }

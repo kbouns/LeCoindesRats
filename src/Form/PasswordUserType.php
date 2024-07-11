@@ -45,9 +45,9 @@ class PasswordUserType extends AbstractType
                 $form = $event->getForm();
                 $user = $form->getData();
 
-                // Ensure that the user is correctly retrieved from the form data
+
                 if (!$user instanceof PasswordAuthenticatedUserInterface) {
-                    // Handle the error case where the user is not an instance of PasswordAuthenticatedUserInterface
+
                     $form->addError(new FormError('User entity is not valid.'));
                     return;
                 }
@@ -55,14 +55,13 @@ class PasswordUserType extends AbstractType
                 $actualPwd = $form->get('actualPassword')->getData();
                 $newPwd = $form->get('plainPassword')->getData();
 
-                // Validate the actual password before changing it
                 if ($this->passwordHasher->isPasswordValid($user, $actualPwd)) {
-                    // Hash the new password
+       
                     $hashedNewPwd = $this->passwordHasher->hashPassword($user, $newPwd);
-                    // Set the new password on the user entity
+
                     $user->setPassword($hashedNewPwd);
                 } else {
-                    // Handle invalid current password
+
                     $form->get('actualPassword')->addError(new FormError('Current password is incorrect.'));
                 }
             });
