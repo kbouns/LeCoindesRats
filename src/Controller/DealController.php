@@ -173,7 +173,7 @@ class DealController extends AbstractController
 
             $this->addFlash('success', 'Le deal a été modifié avec succès.');
 
-            return $this->redirectToRoute('app_account_deal_history');
+            return $this->redirectToRoute('deal_index');
         }
 
         return $this->render('deal/edit.html.twig', [

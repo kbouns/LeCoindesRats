@@ -45,8 +45,15 @@ class HomeController extends AbstractController
             ];
         }
 
+        usort($dealsWithVotes, function ($a, $b) {
+            return $b['upvotes'] <=> $a['upvotes'];
+        });
+
+        $bestDeals = array_slice($dealsWithVotes, 0, 3);
+
         return $this->render('home/index.html.twig', [
             'dealsWithVotes' => $dealsWithVotes,
+            'bestDeals' => $bestDeals,
         ]);
     }
 
@@ -55,7 +62,7 @@ class HomeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user) {
-            return new JsonResponse(['error' => 'User not authenticated'], 401);
+            return new JsonResponse(['error' => "Vous n'êtes pas connecter, Connectez-vous !!! "], 401);
         }
 
         $voteType = $request->request->get('vote_type');

@@ -19,13 +19,61 @@
                 &raquo;
             </button>
         </div>
+
+        <!-- Best Deals for Mobile View -->
+        <div class="row d-md-none">
+            <div class="col-12">
+                <h1>Rats + Hot</h1>
+                <div class="best-deals mb-4 position-relative">
+                    <button class="btn btn-dark btn-sm position-absolute start-0 top-50 translate-middle-y" id="scroll-left-best-deals-mobile">
+                        &laquo;
+                    </button>
+                    <div class="best-deals-scroll-container d-flex flex-row mx-2" style="overflow-x: hidden; flex: 1;">
+                        {% for bestDeal in bestDeals %}
+                            {% set deal = bestDeal.deal %}
+                            <div class="card best-deal-card me-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="flex: 0 0 90%;">
+                                <div class="row no-gutters">
+                                    <div class="col-4">
+                                        {% if deal.imageFilename %}
+                                            <a href="{{ path('deal_show', {id: deal.id}) }}">
+                                                <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('deal_show', {id: deal.id}) }}">
+                                                <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-8">
+                                        <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
+                                            <div class="card-body p-2">
+                                                <h5 class="card-title">{{ deal.title }}</h5>
+                                                <p class="card-text mb-1">{{ deal.description }}</p>
+                                                <p class="card-text mb-1">
+                                                    Bons Rats + : <span class="text-danger">{{ bestDeal.upvotes }}</span>
+                                                </p>
+                                                <p class="card-text mb-1 text-danger">{{ deal.initialprice }} €</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="btn btn-dark btn-sm position-absolute end-0 top-50 translate-middle-y" id="scroll-right-best-deals-mobile">
+                        &raquo;
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 {% for dealWithVotes in dealsWithVotes %}
                     {% set deal = dealWithVotes.deal %}
                     {% set upvotes = dealWithVotes.upvotes %}
                     {% set downvotes = dealWithVotes.downvotes %}
-                    <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="max-width: 1200px;">
+                    <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}">
                         <div class="row no-gutters">
                             <div class="col-md-4">
                                 {% if deal.imageFilename %}
@@ -102,6 +150,43 @@
                     </div>
                 {% endfor %}
             </div>
+
+            <div class="col-md-4 d-none d-md-block">
+                <h1>Rats + Hot</h1>
+                <div class="best-deals">
+                    {% for bestDeal in bestDeals %}
+                        {% set deal = bestDeal.deal %}
+                        <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    {% if deal.imageFilename %}
+                                        <a href="{{ path('deal_show', {id: deal.id}) }}">
+                                            <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('deal_show', {id: deal.id}) }}">
+                                            <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
+                                        <div class="card-body p-2">
+                                            <br>
+                                            <h5 class="card-title">{{ deal.title }}</h5>
+                                            <p class="card-text mb-1">{{ deal.description }}</p>
+                                            <p class="card-text mb-1">
+                                                Bons Rats + : <span class="text-danger">{{ bestDeal.upvotes }}</span>
+                                            </p>
+                                            <p class="card-text mb-1 text-danger">{{ deal.initialprice }} €</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -145,6 +230,43 @@
             document.getElementById('scroll-right').addEventListener('click', () => {
                 scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
             });
+
+            const bestDealsScrollContainerMobile = document.querySelector('.best-deals-scroll-container');
+            document.getElementById('scroll-left-best-deals-mobile').addEventListener('click', () => {
+                bestDealsScrollContainerMobile.scrollBy({ left: -200, behavior: 'smooth' });
+            });
+            document.getElementById('scroll-right-best-deals-mobile').addEventListener('click', () => {
+                bestDealsScrollContainerMobile.scrollBy({ left: 200, behavior: 'smooth' });
+            });
+
+            const bestDealsScrollContainer = document.querySelector('.best-deals-scroll-container');
+            document.getElementById('scroll-left-best-deals').addEventListener('click', () => {
+                bestDealsScrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+            });
+            document.getElementById('scroll-right-best-deals').addEventListener('click', () => {
+                bestDealsScrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+            });
         });
     </script>
+    <style>
+        @media (max-width: 768px) {
+            .best-deals {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch;
+                position: relative;
+            }
+            .best-deals .card {
+                flex: 0 0 90%;
+                margin-right: 10px;
+            }
+            .btn {
+                flex: 0 0 30px;
+            }
+            .position-absolute {
+                z-index: 1;
+            }
+        }
+    </style>
 {% endblock %}
