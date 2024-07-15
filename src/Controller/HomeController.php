@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Deal;
-use App\Entity\Vote;
-use App\Repository\VoteRepository;
+use App\Repository\DealRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,13 +21,18 @@ class HomeController extends AbstractController
     }
 
     #[Route('/', name: 'app_home')]
-    public function index(): Response
+    public function index(Request $request, DealRepository $dealRepository): Response
     {
-        $dealRepository = $this->managerRegistry->getRepository(Deal::class);
-        $deals = $dealRepository->findBy([], ['publicationdate' => 'DESC']);
+        $searchTerm = $request->query->get('search', '');
+
+        if ($searchTerm) {
+            $deals = $dealRepository->searchDeals($searchTerm);
+        } else {
+            $deals = $dealRepository->findBy([], ['publicationdate' => 'DESC']);
+        }
 
         $dealsWithVotes = [];
-        foreach ($deals as $deal) { 
+        foreach ($deals as $deal) {
             $upvotes = 0;
             $downvotes = 0;
             foreach ($deal->getVotes() as $vote) {
@@ -54,6 +58,7 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'dealsWithVotes' => $dealsWithVotes,
             'bestDeals' => $bestDeals,
+            'searchTerm' => $searchTerm,
         ]);
     }
 
@@ -62,29 +67,26 @@ class HomeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user) {
-            return new JsonResponse(['error' => "Vous n'êtes pas connecter, Connectez-vous !!! "], 401);
+            return new JsonResponse(['error' => "Vous n'êtes pas connecté. Connectez-vous !"], 401);
         }
 
         $voteType = $request->request->get('vote_type');
         $entityManager = $this->managerRegistry->getManager();
 
-        $vote = $voteRepository->findOneBy(['deal' => $deal, 'user' => $user]);
+        // Vérifiez si l'utilisateur a déjà voté pour ce deal
+        $existingVote = $voteRepository->findOneBy(['deal' => $deal, 'user' => $user]);
 
-        if ($vote) {
-            if ($vote->getTypeVote() === $voteType) {
-                $entityManager->remove($vote);
-            } else {
-                $vote->setTypeVote($voteType);
-                $entityManager->persist($vote);
-            }
-        } else {
-            $vote = new Vote();
-            $vote->setUser($user);
-            $vote->setDeal($deal);
-            $vote->setTypeVote($voteType);
-            $entityManager->persist($vote);
+        if ($existingVote) {
+            // L'utilisateur a déjà voté, retournez une erreur
+            return new JsonResponse(['error' => 'Vous avez déjà voté pour ce deal.'], 400);
         }
 
+        // Créez un nouveau vote
+        $vote = new Vote();
+        $vote->setUser($user);
+        $vote->setDeal($deal);
+        $vote->setTypeVote($voteType);
+        $entityManager->persist($vote);
         $entityManager->flush();
 
         $upvotes = $voteRepository->count(['deal' => $deal, 'typeVote' => 'upvote']);

@@ -31,7 +31,7 @@
                     <div class="best-deals-scroll-container d-flex flex-row mx-2" style="overflow-x: hidden; flex: 1;">
                         {% for bestDeal in bestDeals %}
                             {% set deal = bestDeal.deal %}
-                            <div class="card best-deal-card me-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="flex: 0 0 90%;">
+                            <div class="card best-deal-card me-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="flex: 0 0 80%;">
                                 <div class="row no-gutters">
                                     <div class="col-4">
                                         {% if deal.imageFilename %}
@@ -222,7 +222,7 @@
                     .catch(error => console.error('Error:', error));
                 });
             });
-
+            // cela permets aux votes de manière asynchrone et interactive
             const scrollContainer = document.querySelector('.category-scroll-container');
             document.getElementById('scroll-left').addEventListener('click', () => {
                 scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
@@ -258,7 +258,7 @@
                 position: relative;
             }
             .best-deals .card {
-                flex: 0 0 90%;
+                flex: 0 0 80%;
                 margin-right: 10px;
             }
             .btn {
@@ -266,6 +266,11 @@
             }
             .position-absolute {
                 z-index: 1;
+            }
+        }
+        @media (max-width: 576px) {
+            .best-deals .card {
+                flex: 0 0 70%;
             }
         }
     </style>

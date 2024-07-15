@@ -16,18 +16,30 @@ class DealRepository extends ServiceEntityRepository
         parent::__construct($registry, Deal::class);
     }
 
-        /**
+    /**
      * @return Deal[] Returns an array of Deal objects ordered by ID in ascending order
      */
-public function findDealsAscending(): array
-{
-    return $this->createQueryBuilder('deals')
-        ->orderBy('deals.id', 'DESC')
-        ->getQuery()
-        ->getResult()
-    ;
-}
+    public function findDealsAscending(): array
+    {
+        return $this->createQueryBuilder('deals')
+            ->orderBy('deals.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
+    /**
+     * @param string $searchTerm
+     * @return Deal[]
+     */
+    public function searchDeals(string $searchTerm): array
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.title LIKE :searchTerm OR d.description LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%')
+            ->orderBy('d.publicationdate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    public function findOneBySomeField($value): ?Deal
     //    {

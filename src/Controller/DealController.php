@@ -105,7 +105,6 @@ class DealController extends AbstractController
             'downvotes' => $downvotes,
         ]);
     }
-
     #[Route('/deal/{id}/upvote', name: 'deal_upvote', methods: ['POST'])]
     #[Route('/deal/{id}/downvote', name: 'deal_downvote', methods: ['POST'])]
     public function vote(Deal $deal, EntityManagerInterface $entityManager, VoteRepository $voteRepository, Request $request): Response
@@ -121,25 +120,21 @@ class DealController extends AbstractController
     
         $vote = $voteRepository->findOneBy(['deal' => $deal, 'user' => $user]);
     
-        if ($vote) {
-            if ($vote->getTypeVote() === $typeVote) {
-                $entityManager->remove($vote);
-            } else {
-                $vote->setTypeVote($typeVote);
-                $entityManager->persist($vote);
-            }
-        } else {
+        if (!$vote) {
             $vote = new Vote();
             $vote->setUser($user);
             $vote->setDeal($deal);
             $vote->setTypeVote($typeVote);
             $entityManager->persist($vote);
+        } else {
+            $this->addFlash('error', 'Vous avez déjà voté pour ce deal.');
         }
     
         $entityManager->flush();
     
         return $this->redirectToRoute('deal_show', ['id' => $deal->getId()]);
     }
+    
     
 
     #[Route('/deal/{id}/edit', name: 'deal_edit', methods: ['GET', 'POST'])]
