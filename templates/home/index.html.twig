@@ -10,7 +10,7 @@
             </button>
             <div class="category-scroll-container d-flex flex-grow-1 justify-content-start mx-2">
                 {% for category in get1stLevelCategories() %}
-                    <a href="{{ path('app_categorie_show', {'id': category.id}) }}" class="btn btn-dark me-2 category-item">
+                    <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn btn-dark me-2 category-item">
                         {{ category.nameCategory }}
                     </a>
                 {% endfor %}

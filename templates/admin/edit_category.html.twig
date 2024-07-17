@@ -1,0 +1,14 @@
+{# templates/admin/edit_category.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1>Edit Category</h1>
+        {{ form_start(form) }}
+            {{ form_row(form.nameCategory) }}
+            {{ form_row(form.save) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

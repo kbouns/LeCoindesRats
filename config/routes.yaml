@@ -3,3 +3,10 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+admin_dashboard:
+    path: /admin/dashboard
+    controller: App\Controller\AdminController::dashboard
+
+user_dashboard:
+    path: /user/dashboard
+    controller: App\Controller\AccountController::dashboard

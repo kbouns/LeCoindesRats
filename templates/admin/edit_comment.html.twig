@@ -1,0 +1,14 @@
+{# templates/admin/edit_comment.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Comment{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1>Edit Comment</h1>
+        {{ form_start(form) }}
+            {{ form_row(form.content) }}
+            {{ form_row(form.save) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer Utilisateur{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Supprimer Utilisateur</h1>
+    <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.</p>
+    <form method="post" action="{{ path('admin_delete_user', {'id': user.id}) }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+        <a href="{{ path('admin_users') }}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

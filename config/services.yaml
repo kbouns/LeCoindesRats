@@ -8,6 +8,10 @@ parameters:
 services:
     App\Service\CategoryService:
         public: true
+    App\Security\LoginSuccessHandler:
+        arguments:
+            $router: '@router'
+            $security: '@security.helper'
 
     App\Twig\AppExtension:
         tags: ['twig.extension']

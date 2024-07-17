@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer Deals{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Gérer Deals</h1>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Utilisateur</th>
+                <th>Date de création</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for deal in deals %}
+                <tr>
+                    <td>{{ deal.id }}</td>
+                    <td>{{ deal.title }}</td>
+                    <td>{{ deal.description }}</td>
+                    <td>{{ deal.user.username }}</td>
+                    <td>{{ deal.publicationdate|date('Y-m-d') }}</td>
+                    <td>
+                        <a href="{{ path('admin_edit_deal', {'id': deal.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                        <form method="post" action="{{ path('admin_delete_deal', {'id': deal.id}) }}" style="display:inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ deal.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

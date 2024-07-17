@@ -1,0 +1,36 @@
+{# templates/admin/comments.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Comments{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1>Manage Comments</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Content</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comment in comments %}
+                    <tr>
+                        <td>{{ comment.content }}</td>
+                        <td>
+                            <a href="{{ path('admin_edit_comment', {'id': comment.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <form method="post" action="{{ path('admin_delete_comment', {'id': comment.id}) }}" style="display:inline-block;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2">No comments found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer Votes{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Gérer Votes</h1>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Utilisateur</th>
+                <th>Deal</th>
+                <th>Type de Vote</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vote in votes %}
+                <tr>
+                    <td>{{ vote.id }}</td>
+                    <td>{{ vote.user.username }}</td>
+                    <td>{{ vote.deal.title }}</td>
+                    <td>{{ vote.typeVote }}</td>
+                    <td>
+                        <form method="post" action="{{ path('admin_delete_vote', {'id': vote.id}) }}" style="display:inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vote.id) }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord Administrateur{% endblock %}
+
+{% block body %}
+<style>
+    .dashboard-header {
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 30px;
+    }
+    .dashboard-sections {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-top: 30px;
+    }
+    .dashboard-section {
+        margin: 15px;
+        text-align: center;
+        flex: 1 0 30%;
+        max-width: 30%;
+    }
+    .dashboard-section .card {
+        border: none;
+        transition: transform 0.3s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .dashboard-section .card:hover {
+        transform: scale(1.05);
+    }
+    .dashboard-section .card-body {
+        background: #f8f9fa;
+        color: #333;
+        border-radius: 5px;
+        padding: 20px;
+    }
+    .dashboard-section .btn {
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="dashboard-header">
+        <h1>Tableau de Bord Administrateur</h1>
+    </div>
+    <div class="dashboard-sections">
+        <div class="dashboard-section">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Utilisateurs</h5>
+                    <p class="card-text">Voir et gérer les utilisateurs.</p>
+                    <a href="{{ path('admin_users') }}" class="btn btn-primary">Voir utilisateurs</a>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Deals</h5>
+                    <p class="card-text">Voir et gérer les deals.</p>
+                    <a href="{{ path('admin_deals') }}" class="btn btn-primary">Voir deals</a>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Catégories</h5>
+                    <p class="card-text">Voir et gérer les catégories.</p>
+                    <a href="{{ path('admin_categories') }}" class="btn btn-primary">Voir catégories</a>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Commentaires</h5>
+                    <p class="card-text">Voir et gérer les commentaires.</p>
+                    <a href="{{ path('admin_comments') }}" class="btn btn-primary">Voir commentaires</a>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-section">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Votes</h5>
+                    <p class="card-text">Voir et gérer les votes.</p>
+                    <a href="{{ path('admin_votes') }}" class="btn btn-primary">Voir votes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
