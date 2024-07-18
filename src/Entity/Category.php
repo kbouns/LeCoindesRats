@@ -21,16 +21,17 @@ class Category
     /**
      * @var Collection<int, Deal>
      */
-    #[ORM\ManyToMany(targetEntity: Deal::class, mappedBy: 'Categorie')]
+    #[ORM\ManyToMany(targetEntity: Deal::class, mappedBy: 'categorie')]
     private Collection $deals;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(name: 'categories_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?self $Categories = null;
 
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'Categories')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'Categories', cascade: ['persist', 'remove'])]
     private Collection $categories;
 
     public function __construct()

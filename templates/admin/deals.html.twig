@@ -13,6 +13,7 @@
                 <th>Description</th>
                 <th>Utilisateur</th>
                 <th>Date de création</th>
+                <th>Actif</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -24,11 +25,18 @@
                     <td>{{ deal.description }}</td>
                     <td>{{ deal.user.username }}</td>
                     <td>{{ deal.publicationdate|date('Y-m-d') }}</td>
+                    <td>{{ deal.isActive ? 'Oui' : 'Non' }}</td>
                     <td>
                         <a href="{{ path('admin_edit_deal', {'id': deal.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
                         <form method="post" action="{{ path('admin_delete_deal', {'id': deal.id}) }}" style="display:inline-block;">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ deal.id) }}">
                             <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        </form>
+                        <form method="post" action="{{ path('admin_toggle_deal', {'id': deal.id}) }}" style="display:inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ deal.id) }}">
+                            <button type="submit" class="btn btn-sm {{ deal.isActive ? 'btn-danger' : 'btn-info' }}">
+                                {{ deal.isActive ? 'Désactiver' : 'Activer' }}
+                            </button>
                         </form>
                     </td>
                 </tr>

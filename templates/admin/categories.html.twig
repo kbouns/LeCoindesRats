@@ -1,15 +1,16 @@
 {# templates/admin/categories.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Categories Management{% endblock %}
+{% block title %}Gestion des Catégories{% endblock %}
 
 {% block body %}
     <div class="container my-5">
-        <h1>Categories</h1>
+        <h1>Catégories</h1>
+        <a href="{{ path('admin_new_categories') }}" class="btn btn-success mb-3">Nouvelle Catégorie</a>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Nom</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -18,16 +19,16 @@
                     <tr>
                         <td>{{ category.nameCategory }}</td>
                         <td>
-                            <a href="{{ path('admin_edit_category', {'id': category.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="{{ path('admin_edit_category', {'id': category.id}) }}" class="btn btn-primary btn-sm">Editer</a>
                             <form method="post" action="{{ path('admin_delete_category', {'id': category.id}) }}" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
-                                <button class="btn btn-danger btn-sm">Delete</button>
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
                             </form>
                         </td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="2">No categories found</td>
+                        <td colspan="2">Erreur de Catégorie non trouvé</td>
                     </tr>
                 {% endfor %}
             </tbody>

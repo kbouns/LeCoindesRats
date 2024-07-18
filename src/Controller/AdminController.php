@@ -1,26 +1,27 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Deal;
-use App\Entity\Category;
-use App\Entity\Comment;
+use App\Entity\User;
 use App\Entity\Vote;
-use App\Repository\UserRepository;
+use App\Entity\Comment;
+use App\Entity\Category;
+use App\Form\CategoryType;
 use App\Repository\DealRepository;
-use App\Repository\CategoryRepository;
-use App\Repository\CommentRepository;
+use App\Repository\UserRepository;
 use App\Repository\VoteRepository;
+use App\Repository\CommentRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
@@ -113,6 +114,18 @@ class AdminController extends AbstractController
         return $this->render('admin/deals.html.twig', ['deals' => $deals]);
     }
 
+    #[Route('/deals/toggle/{id}', name: 'admin_toggle_deal', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function toggleDeal(Deal $deal, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        if ($this->isCsrfTokenValid('toggle' . $deal->getId(), $request->request->get('_token'))) {
+            $deal->setIsActive(!$deal->getIsActive());
+            $entityManager->flush();
+        }
+    
+        return $this->redirectToRoute('admin_deals');
+    }
+
     #[Route('/deals/edit/{id}', name: 'admin_edit_deal', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function editDeal(Deal $deal, Request $request, EntityManagerInterface $entityManager): Response
@@ -152,6 +165,28 @@ class AdminController extends AbstractController
     {
         $categories = $categoryRepository->findAll();
         return $this->render('admin/categories.html.twig', ['categories' => $categories]);
+    }
+
+    #[Route('/categories/new', name: 'admin_new_categories', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function createCategory(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Category created successfully.');
+
+            return $this->redirectToRoute('admin_new_categories');
+        }
+
+        return $this->render('admin/new_category.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/categories/edit/{id}', name: 'admin_edit_category', methods: ['GET', 'POST'])]

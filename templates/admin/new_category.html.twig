@@ -1,0 +1,17 @@
+{# templates/admin/new_category.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Nouvelle Catégorie</h1>
+
+        {{ form_start(form) }}
+            <div class="form-group">
+                {{ form_label(form.nameCategory) }}
+                {{ form_widget(form.nameCategory) }}
+                {{ form_errors(form.nameCategory) }}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Sauvegarder</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

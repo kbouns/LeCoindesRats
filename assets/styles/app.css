@@ -98,3 +98,12 @@ body {
 .btn-dark:hover {
     background-color: #23272b;
 }
+.btn-info {
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
