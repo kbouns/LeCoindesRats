@@ -10,3 +10,10 @@ admin_dashboard:
 user_dashboard:
     path: /user/dashboard
     controller: App\Controller\AccountController::dashboard
+contact:
+    path: /contact
+    controller: App\Controller\ContactController::contact
+
+contact_success:
+    path: /contact/success
+    controller: App\Controller\ContactController::success
