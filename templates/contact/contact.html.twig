@@ -2,15 +2,21 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact{% endblock %}
+{% block title %}Contact Us{% endblock %}
 
 {% block body %}
-    <h1>Contactez-nous</h1>
+    <h1>Contact Us</h1>
 
-    {{ form_start(form, {'action': 'https://getform.io/f/lbjkqeya', 'method': 'POST'}) }}
+    {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.email) }}
         {{ form_row(form.message) }}
         {{ form_row(form.send) }}
     {{ form_end(form) }}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
 {% endblock %}

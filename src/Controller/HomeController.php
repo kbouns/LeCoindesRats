@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Deal;
 use App\Repository\DealRepository;
+use App\Repository\VoteRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,27 +23,27 @@ class HomeController extends AbstractController
     }
 
     #[Route('/', name: 'app_home')]
-    public function index(Request $request, DealRepository $dealRepository): Response
+    public function index(Request $request, DealRepository $dealRepository, VoteRepository $voteRepository, PaginatorInterface $paginator): Response
     {
         $searchTerm = $request->query->get('search', '');
 
         if ($searchTerm) {
-            $deals = $dealRepository->searchDeals($searchTerm);
+            $queryBuilder = $dealRepository->searchDealsQueryBuilder($searchTerm);
         } else {
-            $deals = $dealRepository->findBy([], ['publicationdate' => 'DESC']);
+            $queryBuilder = $dealRepository->createQueryBuilder('d')
+                ->orderBy('d.publicationdate', 'DESC');
         }
 
+        $pagination = $paginator->paginate(
+            $queryBuilder, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
         $dealsWithVotes = [];
-        foreach ($deals as $deal) {
-            $upvotes = 0;
-            $downvotes = 0;
-            foreach ($deal->getVotes() as $vote) {
-                if ($vote->getTypeVote() === 'upvote') {
-                    $upvotes++;
-                } elseif ($vote->getTypeVote() === 'downvote') {
-                    $downvotes++;
-                }
-            }
+        foreach ($pagination as $deal) {
+            $upvotes = $voteRepository->count(['deal' => $deal, 'typeVote' => 'upvote']);
+            $downvotes = $voteRepository->count(['deal' => $deal, 'typeVote' => 'downvote']);
             $dealsWithVotes[] = [
                 'deal' => $deal,
                 'upvotes' => $upvotes,
@@ -49,16 +51,30 @@ class HomeController extends AbstractController
             ];
         }
 
-        usort($dealsWithVotes, function ($a, $b) {
+        // Calcul des best deals indépendamment de la recherche
+        $allDeals = $dealRepository->findAll();
+        $allDealsWithVotes = [];
+        foreach ($allDeals as $deal) {
+            $upvotes = $voteRepository->count(['deal' => $deal, 'typeVote' => 'upvote']);
+            $downvotes = $voteRepository->count(['deal' => $deal, 'typeVote' => 'downvote']);
+            $allDealsWithVotes[] = [
+                'deal' => $deal,
+                'upvotes' => $upvotes,
+                'downvotes' => $downvotes,
+            ];
+        }
+
+        usort($allDealsWithVotes, function ($a, $b) {
             return $b['upvotes'] <=> $a['upvotes'];
         });
 
-        $bestDeals = array_slice($dealsWithVotes, 0, 3);
+        $bestDeals = array_slice($allDealsWithVotes, 0, 3);
 
         return $this->render('home/index.html.twig', [
             'dealsWithVotes' => $dealsWithVotes,
             'bestDeals' => $bestDeals,
             'searchTerm' => $searchTerm,
+            'pagination' => $pagination,
         ]);
     }
 

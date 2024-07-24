@@ -107,3 +107,10 @@ body {
     background-color: #d9534f;
     border-color: #d43f3a;
 }
+.text-bold {
+    font-weight: bold;
+}
+
+.text-blue {
+    color: blue;
+}

@@ -13,7 +13,4 @@ user_dashboard:
 contact:
     path: /contact
     controller: App\Controller\ContactController::contact
-
-contact_success:
-    path: /contact/success
-    controller: App\Controller\ContactController::success
+    

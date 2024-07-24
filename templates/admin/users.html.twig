@@ -1,39 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gérer Utilisateurs{% endblock %}
+{% block title %}Admin Utilisateur{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
-    <h1 class="mb-4">Gérer Utilisateurs</h1>
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Nom d'utilisateur</th>
-                <th>Rôles</th>
-                <th>Date d'inscription</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
+    <h1 class="mb-4 text-center">Liste utilisateurs :</h1>
+    <div class="table-responsive">
+        <table class="table table-striped text-center">
+            <thead class="thead-dark">
                 <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.roles|join(', ') }}</td>
-                    <td>{{ user.inscriptionTime|date('Y-m-d H:i:s') }}</td>
-                    <td>
-                        <a href="{{ path('admin_edit_user', {'id': user.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
-                        <form method="post" action="{{ path('admin_delete_user', {'id': user.id}) }}" style="display:inline-block;">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
-                    </td>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Nom d'utilisateur</th>
+                    <th>Rôles</th>
+                    <th>Date d'inscription</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            {% for role in user.roles %}
+                                {% if role == 'ROLE_USER' %}
+                                    <span class="badge badge-primary">{{ role }}</span>
+                                {% elseif role == 'ROLE_ADMIN' %}
+                                    <span class="badge badge-success">{{ role }}</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">{{ role }}</span>
+                                {% endif %}
+                                {% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ user.inscriptionTime|date('Y-m-d') }}</td>
+                        <td>
+                            <div class="d-flex flex-column align-items-center">
+                                <a href="{{ path('admin_edit_user', {'id': user.id}) }}" class="btn btn-primary mb-2">Modifier</a>
+                                <form method="post" action="{{ path('admin_delete_user', {'id': user.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                    <button type="submit" class="btn btn-danger mb-2">Supprimer</button>
+                                </form>
+                                <a href="{{ path('admin_reset_password', {'id': user.id}) }}" class="btn btn-warning">Réinitialiser Mot de passe</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

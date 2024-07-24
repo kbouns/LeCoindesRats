@@ -12,6 +12,7 @@ use App\Repository\UserRepository;
 use App\Repository\VoteRepository;
 use App\Repository\CommentRepository;
 use App\Repository\CategoryRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/admin')]
@@ -47,6 +49,45 @@ class AdminController extends AbstractController
         $users = $userRepository->findAll();
         return $this->render('admin/users.html.twig', ['users' => $users]);
     }
+
+    #[Route('/users/reset-password/{id}', name: 'admin_reset_password', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function resetPassword(User $user, Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('password', PasswordType::class, [
+                'label' => 'Nouveau mot de passe',
+            ])
+            ->add('confirm_password', PasswordType::class, [
+                'label' => 'Confirmer le mot de passe',
+            ])
+            ->add('save', SubmitType::class, ['label' => 'Réinitialiser Mot de passe'])
+            ->getForm();
+    
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+    
+            if ($data['password'] === $data['confirm_password']) {
+                $newPassword = $passwordHasher->hashPassword($user, $data['password']);
+    
+                $user->setPassword($newPassword);
+                $entityManager->flush();
+    
+                $this->addFlash('success', 'Mot de passe réinitialisé avec succès.');
+    
+                return $this->redirectToRoute('admin_users');
+            } else {
+                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+            }
+        }
+    
+        return $this->render('admin/reset_password.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
+    }
+    
 
     #[Route('/users/edit/{id}', name: 'admin_edit_user', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]

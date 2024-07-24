@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Deal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Deal>
@@ -41,13 +42,11 @@ class DealRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    //    public function findOneBySomeField($value): ?Deal
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function searchDealsQueryBuilder(string $term): QueryBuilder
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.title LIKE :term')
+            ->setParameter('term', '%' . $term . '%')
+            ->orderBy('d.publicationdate', 'DESC');
+    }
 }
