@@ -23,18 +23,18 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_category_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_category_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(ManagerRegistry $doctrine, int $id): Response
     {
         $category = $doctrine->getRepository(Category::class)->find($id);
-
+    
         if (!$category) {
             throw $this->createNotFoundException('No category found for id ' . $id);
         }
-
+    
         // Assuming the Category entity has a relation to Deal entity
         $deals = $category->getDeals();
-
+    
         return $this->render('category/show.html.twig', [
             'category' => $category,
             'deals' => $deals,
