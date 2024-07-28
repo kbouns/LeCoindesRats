@@ -20,53 +20,6 @@
             </button>
         </div>
 
-        <!-- Best Deals for Mobile View -->
-        <div class="row d-md-none">
-            <div class="col-12">
-                <h1>Rats + Hot</h1>
-                <div class="best-deals mb-4 position-relative">
-                    <button class="btn btn-dark btn-sm position-absolute start-0 top-50 translate-middle-y" id="scroll-left-best-deals-mobile">
-                        &laquo;
-                    </button>
-                    <div class="best-deals-scroll-container d-flex flex-row mx-2" style="overflow-x: hidden; flex: 1;">
-                        {% for bestDeal in bestDeals %}
-                            {% set deal = bestDeal.deal %}
-                            <div class="card best-deal-card me-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="flex: 0 0 80%;">
-                                <div class="row no-gutters">
-                                    <div class="col-4">
-                                        {% if deal.imageFilename %}
-                                            <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                                <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
-                                            </a>
-                                        {% else %}
-                                            <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                                <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-8">
-                                        <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
-                                            <div class="card-body p-1">
-                                                <h5 class="card-title">{{ deal.title }}</h5>
-                                                <p class="card-text mb-1">{{ deal.description|length > 100 ? deal.description[:100] ~ '...' : deal.description }}</p>
-                                                <p class="card-text mb-1">
-                                                    Bons Rats + : <span class="text-danger">{{ bestDeal.upvotes }}</span>
-                                                </p>
-                                                <p class="card-text mb-1 text-danger">{{ deal.initialprice }} €</p>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <button class="btn btn-dark btn-sm position-absolute end-0 top-50 translate-middle-y" id="scroll-right-best-deals-mobile">
-                        &raquo;
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-md-9">
                 {% for dealWithVotes in dealsWithVotes %}
@@ -159,14 +112,14 @@
                 </div>
             </div>
 
-            <div class="col-md-3 d-none d-md-block">
+            <div class="col" id="rats-hot">
                 <h1>Rats + Hot</h1>
                 <div class="best-deals">
                     {% for bestDeal in bestDeals %}
                         {% set deal = bestDeal.deal %}
                         <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}">
                             <div class="row no-gutters">
-                                <div class="col-md-12">
+                                <div class="col">
                                     {% if deal.imageFilename %}
                                         <a href="{{ path('deal_show', {id: deal.id}) }}">
                                             <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 150px; object-fit: cover;">
@@ -262,53 +215,15 @@
             height: 150px; 
             width: auto; 
         }
-        @media (max-width: 768px) {
-            .best-deals {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: hidden;
-                -webkit-overflow-scrolling: touch;
-                position: relative;
-            }
-            .best-deals .card {
-                flex: 0 0 80%;
-                margin-right: 10px;
-            }
-            .btn {
-                flex: 0 0 30px;
-            }
-            .position-absolute {
-                z-index: 1;
-            }
-            .card img {
-                width: 50%;
-                height: auto; 
-            }
-            .card .col-4 {
-                width: 50%; 
-            }
-            .card .col-8 {
-                width: 50%; 
-            }
-            .card .d-none.d-md-block {
-                display: none !important; 
-            }
-            .card .btn-secondary img {
-                display: none; 
-            }
-        }
-        @media (max-width: 1080px) {
-            .best-deals .card {
-                flex: 0 0 70%;
-            }
-            .card img {
-                width: 100%; 
-                height: auto; 
-            }
-        }
         .flex-column {
             display: flex;
             flex-direction: column;
+        }
+
+        @media (max-width: 310px) {
+            #rats-hot {
+                display: flex;
+            }
         }
     </style>
 {% endblock %}
