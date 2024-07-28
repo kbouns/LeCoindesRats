@@ -1,0 +1,3 @@
+knp_paginator:
+    template:
+        pagination: 'bundles/KnpPaginatorBundle/Pagination/bootstrap_v4_pagination.html.twig' # chemin de votre template

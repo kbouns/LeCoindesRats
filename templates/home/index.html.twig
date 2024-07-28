@@ -128,14 +128,14 @@
                                                 <span class="text-muted">Aucune catégorie</span>
                                             {% endif %}
                                         </p>
-                                        <div class="d-flex justify-content-between align-items-center mt-2">
-                                                <p class="card-text mb-1">
-                                                    {% if deal.user %}
-                                                        <span class="text-bold text-blue">{{ deal.user.username }}</span>
-                                                    {% else %}
-                                                        <strong class="text-blue">Utilisateur inconnu</strong>
-                                                    {% endif %}
-                                                </p>
+                                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mt-2">
+                                            <p class="card-text mb-1">
+                                                {% if deal.user %}
+                                                    <span class="text-bold text-blue">{{ deal.user.username }}</span>
+                                                {% else %}
+                                                    <strong class="text-blue">Utilisateur inconnu</strong>
+                                                {% endif %}
+                                            </p>
                                             <div>
                                                 <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
                                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-md-none">
@@ -169,7 +169,7 @@
                                 <div class="col-md-12">
                                     {% if deal.imageFilename %}
                                         <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                            <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 150px; object-fit: full-cover;">
+                                            <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 150px; object-fit: cover;">
                                         </a>
                                     {% else %}
                                         <a href="{{ path('deal_show', {id: deal.id}) }}">
@@ -228,7 +228,7 @@
                     .catch(error => console.error('Error:', error));
                 });
             });
-            // cela permets aux votes de manière asynchrone et interactive
+
             const scrollContainer = document.querySelector('.category-scroll-container');
             document.getElementById('scroll-left').addEventListener('click', () => {
                 scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
@@ -305,6 +305,10 @@
                 width: 100%; 
                 height: auto; 
             }
+        }
+        .flex-column {
+            display: flex;
+            flex-direction: column;
         }
     </style>
 {% endblock %}
