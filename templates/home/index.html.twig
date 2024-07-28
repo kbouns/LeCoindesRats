@@ -93,7 +93,8 @@
                                                 <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
                                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-md-none">
                                                     <img src="{{ asset('images/conversation.jpg') }}" alt="Commentaires" style="height: 20px; width: 20px;">
-                                                    {{ deal.comments|length }}
+                                                    <span class="d-none d-md-inline">{{ deal.comments|length }} Commentaires</span>
+                                                    <span class="d-inline d-md-none">{{ deal.comments|length }}</span>
                                                 </a>
                                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-none d-md-inline">
                                                     <img src="{{ asset('images/conversation.jpg') }}" alt="Commentaires" style="height: 20px; width: 20px;">
@@ -227,6 +228,9 @@
             .col-12 {
                 flex: 0 0 100%;
                 max-width: 100%;
+            }
+            .d-md-none .d-md-inline {
+                display: none !important;
             }
         }
     </style>
