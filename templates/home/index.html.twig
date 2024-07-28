@@ -21,7 +21,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-9 col-12">
+            <div class="col-12 col-lg-9">
                 {% for dealWithVotes in dealsWithVotes %}
                     {% set deal = dealWithVotes.deal %}
                     {% set upvotes = dealWithVotes.upvotes %}
@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 d-none d-md-block" id="rats-hot">
+            <div class="col-lg-3 d-none d-lg-block" id="rats-hot">
                 <h1>Rats + Hot</h1>
                 <div class="best-deals">
                     {% for bestDeal in bestDeals %}
@@ -220,14 +220,13 @@
             flex-direction: column;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 767.98px) {
             #rats-hot {
                 display: none;
             }
-        }
-        @media (min-width: 1024px) {
-                      #rats-hot {
-                display: none;
+            .col-12 {
+                flex: 0 0 100%;
+                max-width: 100%;
             }
         }
     </style>
