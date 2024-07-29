@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -50,6 +51,11 @@ class RegisterType extends AbstractType
             ->add('InscriptionTime', null, [
                 'label' => "Jour d'inscription :",
                 'widget' => 'single_text',
+            ])
+            ->add('acceptCharte', CheckboxType::class, [
+                'label' => "J'accepte la charte numérique",
+                'mapped' => false, // ce champ n'est pas mappé directement à l'entité User
+                'required' => true, // utilisateur doit cocher pour pouvoir soumettre
             ])
             ->add('submit',SubmitType::class)
         ;

@@ -1,9 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RegisterController!{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
+    <div>
+        <h1>Inscription</h1>
 
-{{form(Registerform)}}
-</div>
+        {# Afficher les messages flash #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {{ form_start(Registerform) }}
+
+        {{ form_row(Registerform.Username) }}
+        {{ form_row(Registerform.firstname) }}
+        {{ form_row(Registerform.lastname) }}
+        {{ form_row(Registerform.email) }}
+        {{ form_row(Registerform.plainPassword) }}
+        {{ form_row(Registerform.InscriptionTime) }}
+
+        {{ form_row(Registerform.acceptCharte) }}
+        <label for="{{ Registerform.acceptCharte.vars.id }}"></label><br><br>
+
+        {{ form_row(Registerform.submit) }}
+
+        {{ form_end(Registerform) }}
+    </div>
 {% endblock %}

@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Espace Membre Privée{% endblock %}
+
 {% block body %}
 <style>
     .dashboard-header {
@@ -38,6 +40,16 @@
         border: none;
         color: #fff;
         margin-top: 10px;
+    }
+    @media (max-width: 768px) {
+        .dashboard-options {
+            justify-content: center; /* Centre les éléments horizontalement */
+        }
+        .dashboard-option {
+            flex: 1 0 100%; /* Occupe 100% de la largeur du conteneur */
+            max-width: 100%; /* Assure que les éléments ne débordent pas */
+            margin: 10px 0; /* Réduit la marge pour les petits écrans */
+        }
     }
 </style>
 
