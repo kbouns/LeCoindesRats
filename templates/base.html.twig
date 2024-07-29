@@ -1,14 +1,14 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" sizes="64x64" href="{{ asset('images/LCRiconefav.ico') }}">
-        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        {% block stylesheets %}{% endblock %}
-        <style>
-            .navbar-brand img {
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" sizes="64x64" href="{{ asset('images/LCRiconefav.ico') }}">
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% block stylesheets %}{% endblock %}
+    <style>
+     .navbar-brand img {
                 max-height: 90px;
                 vertical-align: middle;
             }
@@ -54,88 +54,108 @@
                     display: none;
                 }
             }
-        </style>
-    </head>
-    <body>
-        <header class="bg-light mb-4">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container position-relative">
-                    <a class="navbar-brand" href="{{ path('app_home') }}">
-                        <img src="{{ asset('images/Lecoindesrats1.png') }}" alt="Logo" height="90">
-                    </a>
-                    <div class="d-lg-none user-btn-container mt-1 me-5 ms-1">
+    </style>
+</head>
+<body>
+    <header class="bg-light mb-4">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container position-relative">
+                <a class="navbar-brand" href="{{ path('app_home') }}">
+                    <img src="{{ asset('images/Lecoindesrats1.png') }}" alt="Logo" height="90">
+                </a>
+                <div class="d-lg-none user-btn-container mt-1 me-5 ms-1">
+                    {% if app.user %}
+                        <div class="dropdown">
+                            <button class="btn btn-info text-white dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ app.user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                <li><a class="dropdown-item" href="{{ path('deal_new') }}">Publier un deal</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="{% if is_granted('ROLE_ADMIN') %}
+                                        {{ path('admin_dashboard') }}
+                                        {% elseif is_granted('ROLE_MODERATOR') %}
+                                        {{ path('moderator_redirect_dashboard') }}
+                                        {% else %}
+                                        {{ path('app_account') }}
+                                        {% endif %}">
+                                        Compte
+                                    </a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a class="btn btn-success text-white me-2" href="{{ path('app_login') }}">Login</a>
+                        <a class="btn btn-warning" href="{{ path('app_register') }}">Register</a>
+                    {% endif %}
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Coupons</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('commentaire') }}">Commentaire</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex me-3" method="get" action="{{ path('app_home') }}">
+                        <input class="form-control me-2" type="search" name="search" value="{{ searchTerm|default('') }}" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                    <ul class="navbar-nav d-none d-lg-flex">
                         {% if app.user %}
-                            <div class="dropdown">
-                                <button class="btn btn-info text-white dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ app.user.username }}
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="{{ path('deal_new') }}">Publier un deal</a></li>
-                                    <li><a class="dropdown-item" href="{% if is_granted('ROLE_ADMIN') %}{{ path('admin_dashboard') }}{% else %}{{ path('app_account') }}{% endif %}">Compte</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% if is_granted('ROLE_ADMIN') %}
+                                            {{ path('admin_dashboard') }}
+                                            {% elseif is_granted('ROLE_MODERATOR') %}
+                                            {{ path('moderator_redirect_dashboard') }}
+                                            {% else %}
+                                            {{ path('app_account') }}
+                                            {% endif %}">
+                                            Compte
+                                        </a>
+                                    </li>
                                     <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
                                 </ul>
-                            </div>
+                            </li>
                         {% else %}
-                            <a class="btn btn-success text-white me-2" href="{{ path('app_login') }}">Login</a>
-                            <a class="btn btn-warning" href="{{ path('app_register') }}">Register</a>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-success text-white me-2" href="{{ path('app_login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-warning" href="{{ path('app_register') }}">Register</a>
+                            </li>
                         {% endif %}
-                    </div>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Coupons</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('commentaire') }}">Commentaire</a>
-                            </li>
-                        </ul>
-                        <form class="d-flex me-3" method="get" action="{{ path('app_home') }}">
-                            <input class="form-control me-2" type="search" name="search" value="{{ searchTerm|default('') }}" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                        <ul class="navbar-nav d-none d-lg-flex">
-                            {% if app.user %}
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {{ app.user.username }}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="{{ path('deal_new') }}">Publier un deal</a></li>
-                                        <li><a class="dropdown-item" href="{% if is_granted('ROLE_ADMIN') %}{{ path('admin_dashboard') }}{% else %}{{ path('app_account') }}{% endif %}">Compte</a></li>
-                                        <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
-                                    </ul>
-                                </li>
-                            {% else %}
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-success text-white me-2" href="{{ path('app_login') }}">Login</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-warning" href="{{ path('app_register') }}">Register</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
-            </nav>
-        </header>
-
-        <main class="container">
-            {% block body %}{% endblock %}
-        </main>
-
-        <footer class="text-center py-4 mt-4">
-            <div class="container">
-                <p>&copy;2024 LE COIN DES RATS | <a href="{{ path('app_contact') }}">Contactez-nous</a></p>
             </div>
-        </footer>
+        </nav>
+    </header>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        {% block javascripts %}{% endblock %}
-    </body>
-    </html>
+    <main class="container">
+        {% block body %}{% endblock %}
+    </main>
+
+    <footer class="text-center py-4 mt-4">
+        <div class="container">
+            <p>&copy;2024 LE COIN DES RATS | <a href="{{ path('app_contact') }}">Contactez-nous</a></p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

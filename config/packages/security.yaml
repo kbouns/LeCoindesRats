@@ -4,6 +4,12 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
+    # Hiérarchie des rôles
+    role_hierarchy:
+        ROLE_USER: []
+        ROLE_MODERATOR: [ROLE_USER]
+        ROLE_ADMIN: [ROLE_MODERATOR, ROLE_USER]
+
     # Providers pour la récupération des utilisateurs
     providers:
         app_user_provider:
@@ -35,6 +41,7 @@ security:
 
     # Contrôle d'accès
     access_control:
+        - { path: ^/moderator, roles: ROLE_MODERATOR }
         - { path: ^/compte, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

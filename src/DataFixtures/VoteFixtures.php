@@ -21,14 +21,22 @@ class VoteFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($deals as $deal) {
             foreach ($users as $user) {
-                // Générer un vote aléatoire
-                $voteType = rand(0, 1) ? 'upvote' : 'downvote';
-                
-                $vote = new Vote();
-                $vote->setUser($user);
-                $vote->setDeal($deal);
-                $vote->setTypeVote($voteType);
-                $manager->persist($vote);
+                // Vérifier si le vote existe déjà pour cet utilisateur et ce deal
+                $existingVote = $manager->getRepository(Vote::class)->findOneBy([
+                    'user' => $user,
+                    'deal' => $deal
+                ]);
+
+                if (!$existingVote) {
+                    // Générer un vote aléatoire
+                    $voteType = rand(0, 1) ? 'upvote' : 'downvote';
+                    
+                    $vote = new Vote();
+                    $vote->setUser($user);
+                    $vote->setDeal($deal);
+                    $vote->setTypeVote($voteType);
+                    $manager->persist($vote);
+                }
             }
         }
 

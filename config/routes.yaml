@@ -10,3 +10,7 @@ admin_dashboard:
 user_dashboard:
     path: /user/dashboard
     controller: App\Controller\AccountController::dashboard
+
+moderator_dashboard:
+    path: /moderator/dashboard
+    controller: App\Controller\ModeratorController::dashboard

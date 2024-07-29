@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Deals{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Gestion des Deals</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Prix initial</th>
+                <th>Prix réduit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for deal in deals %}
+                <tr>
+                    <td>{{ deal.title }}</td>
+                    <td>{{ deal.description }}</td>
+                    <td>{{ deal.initialPrice }}</td>
+                    <td>{{ deal.reducePrice }}</td>
+                    <td>
+                        <a href="{{ path('moderator_deal_detail', {'id': deal.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                        {% if not deal.isActive %}
+                        <form method="post" action="{{ path('moderator_approve_deal', {'id': deal.id}) }}" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ deal.id) }}">
+                            <button type="submit" class="btn btn-success btn-sm">Approuver</button>
+                        </form>
+                        {% else %}
+                        <form method="post" action="{{ path('moderator_reject_deal', {'id': deal.id}) }}" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ deal.id) }}">
+                            <button type="submit" class="btn btn-warning btn-sm">Désactiver</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
