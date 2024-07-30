@@ -55,6 +55,9 @@ class Deal
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'deals')]
     private Collection $categorie;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isPublished = false;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -257,6 +260,18 @@ class Deal
     {
         $this->categorie->removeElement($categorie);
 
+        return $this;
+    }
+
+    public function getIsPublished(): bool
+    {
+        return $this->isPublished;
+    }
+
+    // Setter for isPublished
+    public function setIsPublished(bool $isPublished): self
+    {
+        $this->isPublished = $isPublished;
         return $this;
     }
 }

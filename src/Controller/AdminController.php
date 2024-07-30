@@ -166,7 +166,18 @@ class AdminController extends AbstractController
     
         return $this->redirectToRoute('admin_deals');
     }
+    #[Route('/deals/publish-toggle/{id}', name: 'admin_toggle_publish', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function togglePublish(Deal $deal, EntityManagerInterface $entityManager, Request $request): Response
+    {   
+    if ($this->isCsrfTokenValid('toggle_publish' . $deal->getId(), $request->request->get('_token'))) {
+        $deal->setIsPublished(!$deal->getIsPublished());
+        $entityManager->flush();
+    }
 
+    return $this->redirectToRoute('admin_deals');
+    }
+    
     #[Route('/deals/edit/{id}', name: 'admin_edit_deal', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function editDeal(Deal $deal, Request $request, EntityManagerInterface $entityManager): Response

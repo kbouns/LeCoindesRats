@@ -1,22 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail du deal{% endblock %}
+{% block title %}Deal Details{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1>{{ deal.title }}</h1>
-    <p>{{ deal.description }}</p>
-    <p>Prix initial : {{ deal.initialPrice }}</p>
-    <p>Prix réduit : {{ deal.reducePrice }}</p>
-    <p>Date de création : {{ deal.publicationdate|date('d-m-Y H:i') }}</p>
-    <form method="post" action="{{ path('moderator_approve_deal', {'id': deal.id}) }}" style="display:inline;">
-        <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ deal.id) }}">
-        <button type="submit" class="btn btn-success">Approuver</button>
-    </form>
-    <form method="post" action="{{ path('moderator_reject_deal', {'id': deal.id}) }}" style="display:inline;">
-        <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ deal.id) }}">
-        <button type="submit" class="btn btn-warning">Désactiver</button>
-    </form>
-    <a href="{{ path('moderator_deals') }}" class="btn btn-secondary">Retour</a>
+<div class="container">
+    <h1>Deal Details</h1>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ deal.title }}</h5>
+            <p class="card-text">{{ deal.description }}</p>
+            <p>Status: {{ deal.isActive ? 'Active' : 'Inactive' }} | {{ deal.isPublished ? 'Published' : 'Unpublished' }}</p>
+            <a href="{{ path('moderator_deals') }}" class="btn btn-primary">Back to Deals</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

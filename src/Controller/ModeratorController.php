@@ -68,4 +68,30 @@ class ModeratorController extends AbstractController
 
         return $this->redirectToRoute('moderator_deals');
     }
+
+    #[Route('/deals/expire/{id}', name: 'moderator_expire_deal', methods: ['POST'])]
+    #[IsGranted('ROLE_MODERATOR')]
+    public function expireDeal(Deal $deal, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        if ($this->isCsrfTokenValid('expire' . $deal->getId(), $request->request->get('_token'))) {
+            $deal->setIsPublished(false);
+            $entityManager->flush();
+            $this->addFlash('success', 'Deal marqué comme expiré avec succès.');
+        }
+
+        return $this->redirectToRoute('moderator_deals');
+    }
+
+    #[Route('/deals/publish/{id}', name: 'moderator_publish_deal', methods: ['POST'])]
+    #[IsGranted('ROLE_MODERATOR')]
+    public function publishDeal(Deal $deal, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        if ($this->isCsrfTokenValid('publish' . $deal->getId(), $request->request->get('_token'))) {
+            $deal->setIsPublished(true);
+            $entityManager->flush();
+            $this->addFlash('success', 'Deal publié avec succès.');
+        }
+
+        return $this->redirectToRoute('moderator_deals');
+    }
 }

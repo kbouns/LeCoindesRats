@@ -14,6 +14,7 @@
                 <th>Utilisateur</th>
                 <th>Date de création</th>
                 <th>Actif</th>
+                <th>Périmé</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                     <td>{{ deal.user.username }}</td>
                     <td>{{ deal.publicationdate|date('Y-m-d') }}</td>
                     <td>{{ deal.isActive ? 'Oui' : 'Non' }}</td>
+                    <td>{{ deal.isPublished ? 'Oui' : 'Non' }}</td>
                     <td>
                         <a href="{{ path('admin_edit_deal', {'id': deal.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
                         <form method="post" action="{{ path('admin_delete_deal', {'id': deal.id}) }}" style="display:inline-block;">
@@ -36,6 +38,12 @@
                             <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ deal.id) }}">
                             <button type="submit" class="btn btn-sm {{ deal.isActive ? 'btn-danger' : 'btn-info' }}">
                                 {{ deal.isActive ? 'Désactiver' : 'Activer' }}
+                            </button>
+                        </form>
+                        <form method="post" action="{{ path('admin_toggle_publish', {'id': deal.id}) }}" style="display:inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('toggle_publish' ~ deal.id) }}">
+                            <button type="submit" class="btn btn-sm {{ deal.isPublished ? 'btn-danger' : 'btn-success' }}">
+                                {{ deal.isPublished ? 'Toujours là' : 'Périmé' }}
                             </button>
                         </form>
                     </td>
