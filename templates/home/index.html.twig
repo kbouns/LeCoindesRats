@@ -3,7 +3,7 @@
 {% block title %}Le coin des Rats{% endblock %}
 
 {% block body %}
-    <div class="containerp-0 my-5">
+    <div class="container-lg my-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <button class="btn btn-dark btn-sm me-4" id="scroll-left">
                 &laquo;
@@ -21,7 +21,7 @@
         </div>
 
         <div class="row">
-            <div class="col-12 p-0 col-lg-9">
+            <div class="col-12 col-lg-9">
                 {% for dealWithVotes in dealsWithVotes %}
                     {% set deal = dealWithVotes.deal %}
                     {% set upvotes = dealWithVotes.upvotes %}
@@ -251,8 +251,9 @@
             position: absolute;
             top: 19px; right: -21px;
         }
+        
 
-        @media (max-width: 767.98px) {
+        @media (max-width: 992px) {
             #rats-hot {
                 display: none;
             }
@@ -262,6 +263,12 @@
             }
             .d-md-none .d-md-inline {
                 display: none !important;
+            }
+            .card-text{
+                font-size: 2em;
+            }
+            .card-title{
+                font-size: 2em;
             }
 
         }

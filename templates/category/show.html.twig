@@ -1,22 +1,25 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ category.nameCategory }}{% endblock %}
+
 {% block body %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <button class="btn btn-dark btn-sm me-4" id="scroll-left">
-        &laquo;
-    </button>
-    <div class="category-scroll-container d-flex flex-grow-1 justify-content-start mx-2">
-        {% for category in get1stLevelCategories() %}
-            <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn btn-dark me-2 category-item">
-                {{ category.nameCategory }}
-            </a>
-        {% endfor %}
+<div class="container-lg my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <button class="btn btn-dark btn-sm me-4" id="scroll-left-category">
+            &laquo;
+        </button>
+        <div class="category-scroll-container d-flex flex-grow-1 justify-content-start mx-2">
+            {% for category in get1stLevelCategories() %}
+                <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn btn-dark me-2 category-item">
+                    {{ category.nameCategory }}
+                </a>
+            {% endfor %}
+        </div>
+        <button class="btn btn-dark btn-sm ms-4" id="scroll-right-category">
+            &raquo;
+        </button>
     </div>
-    <button class="btn btn-dark btn-sm ms-4" id="scroll-right">
-        &raquo;
-    </button>
-</div>
-<div class="container my-5">
+
     <h1>{{ category.nameCategory }}</h1>
 
     {% for label, messages in app.flashes %}
@@ -30,55 +33,51 @@
     <div class="deals">
         {% if deals is not empty %}
             <div class="row">
-                <div class="col-md-12">
-                    {% for deal in deals %}
-                        <div class="card mb-4 {{ deal.isActive == '0' ? 'inactive_card' : '' }}">
-                            <div class="row no-gutters">
-                                <div class="col-md-3">
-                                    {% if deal.imageFilename %}
-                                        <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
-                                    {% else %}
-                                        <img src="https://via.placeholder.com/300x200?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
-                                    {% endif %}
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ deal.title }}</h5>
-                                        <p class="card-text">{{ deal.description }}</p>
-                                        <p class="card-text">
-                                            <span class="text-muted"><del>{{ deal.initialPrice|number_format(2, ',', ' ') }} €</del></span>
-                                            <span class="text-danger">{{ deal.reducePrice|number_format(2, ',', ' ') }} €</span>
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">{{ deal.publicationDate|date('Y-m-d') }}</small></p>
-                                        <p class="card-text">
-                                            {% if deal.delivery == 'gratuite' %}
-                                                Livraison : <span class="text-success">Gratuite</span>
-                                            {% elseif deal.delivery == 'payante' %}
-                                                Livraison : <span class="text-warning">Payante</span>
-                                            {% else %}
-                                                Livraison : <span class="text-muted">Non spécifiée</span>
-                                            {% endif %}
-                                        </p>
-
-                                        <p class="card-text">
-                                            Catégories :
-                                            {% if deal.categorie|length > 0 %}
-                                                {% for category in deal.categorie %}
-                                                    <span class="badge bg-secondary">{{ category.nameCategory }}</span>
-                                                {% endfor %}
-                                            {% else %}
-                                                <span class="text-muted"></span>
-                                            {% endif %}
-                                        </p>
-                                        <a href="{{ deal.link }}" class="btn btn-primary btn-sm" target="_blank">Voir le deal</a>
-                                        <a href="{{ path('deal_edit', {id: deal.id}) }}" class="btn btn-primary btn-sm rounded-pill">Modifier</a>
-                                        <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill">Afficher</a>
-                                    </div>
+                {% for deal in deals %}
+                    <div class="card mb-4 {{ deal.isActive == '0' ? 'inactive_card' : '' }}">
+                        <div class="row no-gutters">
+                            <div class="col-md-3">
+                                {% if deal.imageFilename %}
+                                    <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <img src="https://via.placeholder.com/300x200?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 100%; object-fit: cover;">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ deal.title }}</h5>
+                                    <p class="card-text">{{ deal.description }}</p>
+                                    <p class="card-text">
+                                        <span class="text-muted"><del>{{ deal.initialPrice|number_format(2, ',', ' ') }} €</del></span>
+                                        <span class="text-danger">{{ deal.reducePrice|number_format(2, ',', ' ') }} €</span>
+                                    </p>
+                                    <p class="card-text"><small class="text-muted">{{ deal.publicationDate|date('Y-m-d') }}</small></p>
+                                    <p class="card-text">
+                                        {% if deal.delivery == 'gratuite' %}
+                                            Livraison : <span class="text-success">Gratuite</span>
+                                        {% elseif deal.delivery == 'payante' %}
+                                            Livraison : <span class="text-warning">Payante</span>
+                                        {% else %}
+                                            Livraison : <span class="text-muted">Non spécifiée</span>
+                                        {% endif %}
+                                    </p>
+                                    <p class="card-text">
+                                        Catégories :
+                                        {% if deal.categorie|length > 0 %}
+                                            {% for category in deal.categorie %}
+                                                <span class="badge bg-secondary">{{ category.nameCategory }}</span>
+                                            {% endfor %}
+                                        {% else %}
+                                            <span class="text-muted">Aucune catégorie</span>
+                                        {% endif %}
+                                    </p>
+                                    <a href="{{ deal.link }}" class="btn btn-primary btn-sm" target="_blank">Voir le deal</a>
+                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill">Afficher</a>
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
         {% else %}
             <p>No deals available for this category.</p>
@@ -88,6 +87,7 @@
 {% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <style>
         .inactive_card {
             background-color: #f8d7da;
@@ -107,34 +107,45 @@
         .card-text {
             margin-bottom: 0.5rem;
         }
+        .category-scroll-container {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .category-item {
+            display: inline-block;
+        }
+        #scroll-left-category,
+        #scroll-right-category {
+            cursor: pointer;
+        }
+        @media (max-width: 992px) {
+            .card-title {
+                font-size: 2rem;
+            }
+            .card-text {
+                font-size: 1.5rem;
+            }
+            #scroll-left-category,
+            #scroll-right-category {
+                display: none;
+            }
+            .category-scroll-container {
+                display: block;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const scrollContainer = document.querySelector('.category-scroll-container');
-            document.getElementById('scroll-left').addEventListener('click', () => {
+            document.getElementById('scroll-left-category').addEventListener('click', () => {
                 scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
             });
-            document.getElementById('scroll-right').addEventListener('click', () => {
+            document.getElementById('scroll-right-category').addEventListener('click', () => {
                 scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
-            });
-
-            const bestDealsScrollContainerMobile = document.querySelector('.best-deals-scroll-container');
-            document.getElementById('scroll-left-best-deals-mobile').addEventListener('click', () => {
-                bestDealsScrollContainerMobile.scrollBy({ left: -200, behavior: 'smooth' });
-            });
-            document.getElementById('scroll-right-best-deals-mobile').addEventListener('click', () => {
-                bestDealsScrollContainerMobile.scrollBy({ left: 200, behavior: 'smooth' });
-            });
-
-            const bestDealsScrollContainer = document.querySelector('.best-deals-scroll-container');
-            document.getElementById('scroll-left-best-deals').addEventListener('click', () => {
-                bestDealsScrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
-            });
-            document.getElementById('scroll-right-best-deals').addEventListener('click', () => {
-                bestDealsScrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
             });
         });
     </script>
