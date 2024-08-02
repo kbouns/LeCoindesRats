@@ -24,11 +24,74 @@
             color: #333;
             text-align: justify;
         }
+        .card-text {
+            font-size: 1rem;
+        }
+        .custom-badge {
+            font-size: 1rem;
+        }
+        .d-inline {
+            font-size: 1rem;
+        }
+
+        /* Styles pour les écrans plus petits */
+        @media (max-width: 992px) {
+            .d-inline {
+                display: flex; /* Utilisation de flex pour les aligner */
+                justify-content: center;
+                margin: 5px 0; 
+            }
+
+            .btn {
+                font-size: 1.5rem; 
+                padding: 10px 15px; /* Ajuste le padding des boutons */
+            }
+
+            .custom-badge {
+                font-size: 1.5rem;
+            }
+
+            .card-text {
+                font-size: 2rem;
+            }
+
+            .deal-about-title {
+                font-size: 2rem; 
+            }
+
+            .deal-about-text {
+                font-size: 2rem; 
+            }
+
+            /* Masquer certaines sections */
+
+            /* Alignement des boutons en mode mobile */
+            .card-body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .btn-group-inline {
+                display: flex;
+                justify-content: space-between; /* ou flex-start/center si besoin */
+                gap: 10px; /* Espace entre les boutons */
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .card-title + .card-text {
+                margin-top: 15px;
+            }
+        }
     </style>
 {% endblock %}
 
+
+
+
+
 {% block body %}
-    <div class="container my-5">
+    <div class="container-lg my-5">
         <div class="row">
             <div class="col-md-12">
                 <div class="card mb-4 {{ deal.isActive == '0' ? 'inactive_card' : '' }}">
@@ -42,17 +105,18 @@
                         </div>
                         <div class="col-md-6">
                             <div class="card-body">
-                                <br>
-                                <form action="{{ path('deal_upvote', {id: deal.id}) }}" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-outline-success btn-sm">
-                                        Bons Rats <span class="badge bg-light text-dark">{{ upvotes }}</span>
-                                    </button>
-                                </form>
-                                <form action="{{ path('deal_downvote', {id: deal.id}) }}" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                                         Mauvais Rats <span class="badge bg-light text-dark">{{ downvotes }}</span>
-                                    </button>
-                                </form>
+                                <div class="btn-group-inline">
+                                    <form action="{{ path('deal_upvote', {id: deal.id}) }}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-outline-success btn-sm">
+                                            Bons Rats <span class="badge bg-light text-dark">{{ upvotes }}</span>
+                                        </button>
+                                    </form>
+                                    <form action="{{ path('deal_downvote', {id: deal.id}) }}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                            Mauvais Rats <span class="badge bg-light text-dark">{{ downvotes }}</span>
+                                        </button>
+                                    </form>
+                                </div>
                                 <br><br>
                                 <h5 class="card-title">{{ deal.title }}</h5>
                                 <p class="card-text">

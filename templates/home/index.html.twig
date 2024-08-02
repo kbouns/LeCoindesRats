@@ -47,36 +47,28 @@
                             <div class="col-8 col-md-8">
                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
                                     <div class="card-body p-1">
-                                        <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
-                                            <input type="hidden" name="vote_type" value="upvote">
-                                            <button type="submit" class="btn btn-outline-success btn-sm">
-                                                Bons Rats <span class="badge bg-light text-dark" id="upvotes-{{ deal.id }}">{{ upvotes }}</span>
-                                            </button>
-                                        </form>
-                                        <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
-                                            <input type="hidden" name="vote_type" value="downvote">
-                                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                Mauvais Rats <span class="badge bg-light text-dark" id="downvotes-{{ deal.id }}">{{ downvotes }}</span>
-                                            </button>
-                                        </form>
-                                        <br><br>
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
+                                                <input type="hidden" name="vote_type" value="upvote">
+                                                <button type="submit" class="btn btn-outline-success btn-sm">
+                                                    Bons Rats <span class="badge bg-light text-dark" id="upvotes-{{ deal.id }}">{{ upvotes }}</span>
+                                                </button>
+                                            </form>
+                                            <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
+                                                <input type="hidden" name="vote_type" value="downvote">
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                    Mauvais Rats <span class="badge bg-light text-dark" id="downvotes-{{ deal.id }}">{{ downvotes }}</span>
+                                                </button>
+                                            </form>
+                                            <p class="card-text mb-1 date-section"><small class="text-muted">{{ deal.publicationdate|date('Y-m-d') }}</small></p>
+                                        </div>
                                         <h5 class="card-title hover-bg-blue">{{ deal.title }}</h5>
                                         <p class="card-text mb-1">{{ deal.description|length > 100 ? deal.description[:100] ~ '...' : deal.description }}</p>
                                         <p class="card-text mb-1">
                                             <span class="text-muted"><del>{{ deal.initialprice|number_format(2, ',', ' ') }} €</del></span>
                                             <span class="text-danger">{{ deal.reduceprice|number_format(2, ',', ' ') }} €</span>
                                         </p>
-                                        <p class="card-text mb-1"><small class="text-muted">{{ deal.publicationdate|date('Y-m-d') }}</small></p>
-                                        <p class="card-text mb-1 d-none d-md-block">
-                                            {% if deal.delivery == 'gratuite' %}
-                                                Livraison : <span class="text-success">Gratuite</span>
-                                            {% elseif deal.delivery == 'payante' %}
-                                                Livraison : <span class="text-warning">Payante</span>
-                                            {% else %}
-                                                Livraison : <span class="text-muted">Non spécifiée</span>
-                                            {% endif %}
-                                        </p>
-                                        <p class="card-text mb-1 d-none d-md-block">
+                                        <p class="card-text mb-1 d-none d-md-block categories-section">
                                             Catégories :
                                             {% if deal.categorie|length > 0 %}
                                                 {% for category in deal.categorie %}
@@ -246,12 +238,16 @@
             -webkit-transform: rotate(45deg);
             width: 100px;
             display: block;
-            background: #808080;
+            background: #000000; /* Set the background color to red */
             box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
             position: absolute;
             top: 19px; right: -21px;
         }
-        
+        .date-section {
+            margin-left: auto;
+            display: inline-block;
+            margin-right:50px;
+        }
 
         @media (max-width: 992px) {
             #rats-hot {
@@ -270,7 +266,14 @@
             .card-title{
                 font-size: 2em;
             }
-
+            .categories-section {
+                display: none !important;
+            }
+            .date-section {
+                margin-left: auto;
+                display: inline-block;
+                margin-right:40px;
+            }
         }
     </style>
 {% endblock %}
