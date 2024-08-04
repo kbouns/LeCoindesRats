@@ -27,7 +27,7 @@
                     {% set upvotes = dealWithVotes.upvotes %}
                     {% set downvotes = dealWithVotes.downvotes %}
                     <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="position: relative;">
-                        {% if deal.isPublished == true %}
+                        {% if deal.isActive == false %}
                             <div class="ribbon">
                                 <span>Périmé</span>
                             </div>
@@ -89,12 +89,11 @@
                                             <div>
                                                 <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
                                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-md-none">
-                                                    <img src="{{ asset('images/conversation.jpg') }}" alt="Commentaires" style="height: 20px; width: 20px;">
-                                                    <span class="d-none d-md-inline">{{ deal.comments|length }} Commentaires</span>
-                                                    <span class="d-inline d-md-none">{{ deal.comments|length }}</span>
+                                                    <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px;object-fit: contain;">
+                                                    <span class="d-inline">{{ deal.comments|length }}</span>
                                                 </a>
                                                 <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-none d-md-inline">
-                                                    <img src="{{ asset('images/conversation.jpg') }}" alt="Commentaires" style="height: 20px; width: 20px;">
+                                                    <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px; object-fit: contain;">
                                                     {{ deal.comments|length }} Commentaires
                                                 </a>
                                             </div>
@@ -210,8 +209,10 @@
             padding: 1rem; 
         }
         .card img {
-            height: 150px; 
-            width: auto; 
+            max-height: 15rem;
+            min-height:3rem;
+            width:100%;
+             
         }
         .flex-column {
             display: flex;
@@ -273,6 +274,12 @@
                 margin-left: auto;
                 display: inline-block;
                 margin-right:40px;
+            }
+            .d-md-none .d-md-inline {
+                display: none !important;
+            }
+            .d-inline .d-md-inline {
+                display: none !important;
             }
         }
     </style>

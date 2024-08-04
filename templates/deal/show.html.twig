@@ -34,17 +34,25 @@
             font-size: 1rem;
         }
 
+        .comment {
+            margin-bottom: 1rem;
+        }
+
+        .comment-replies {
+            margin-left: 2rem;
+        }
+
         /* Styles pour les écrans plus petits */
         @media (max-width: 992px) {
             .d-inline {
-                display: flex; /* Utilisation de flex pour les aligner */
+                display: flex;
                 justify-content: center;
-                margin: 5px 0; 
+                margin: 5px 0;
             }
 
             .btn {
-                font-size: 1.5rem; 
-                padding: 10px 15px; /* Ajuste le padding des boutons */
+                font-size: 1.5rem;
+                padding: 10px 15px;
             }
 
             .custom-badge {
@@ -56,16 +64,13 @@
             }
 
             .deal-about-title {
-                font-size: 2rem; 
+                font-size: 2rem;
             }
 
             .deal-about-text {
-                font-size: 2rem; 
+                font-size: 2rem;
             }
 
-            /* Masquer certaines sections */
-
-            /* Alignement des boutons en mode mobile */
             .card-body {
                 display: flex;
                 flex-direction: column;
@@ -73,8 +78,8 @@
 
             .btn-group-inline {
                 display: flex;
-                justify-content: space-between; /* ou flex-start/center si besoin */
-                gap: 10px; /* Espace entre les boutons */
+                justify-content: space-between;
+                gap: 10px;
                 width: 100%;
                 margin-top: 10px;
             }
@@ -85,10 +90,6 @@
         }
     </style>
 {% endblock %}
-
-
-
-
 
 {% block body %}
     <div class="container-lg my-5">
@@ -159,17 +160,21 @@
                         <h5 class="card-title">Commentaires</h5>
                         {% if comments|length > 0 %}
                             {% for comment in comments %}
-                                <div class="mb-2">
+                                <div class="comment mb-2">
                                     <p><strong>{{ comment.user ? comment.user.username : 'Utilisateur inconnu' }}</strong> <small class="text-muted">{{ comment.commentTime|date('Y-m-d') }}</small></p>
                                     <p>{{ comment.content }}</p>
                                     <a href="{{ path('comment_reply', {'dealId': deal.id, 'commentId': comment.id}) }}" class="btn btn-sm btn-outline-primary">Répondre</a>
-                                    <hr>
-                                    {% for reply in comment.replies %}
-                                        <div class="ml-4">
-                                            <p><strong>{{ reply.user ? reply.user.username : 'Utilisateur inconnu' }}</strong> <small class="text-muted">{{ reply.commentTime|date('Y-m-d') }}</small></p>
-                                            <p>{{ reply.content }}</p>
+                                    {% if comment.replies|length > 0 %}
+                                        <div class="comment-replies">
+                                            {% for reply in comment.replies %}
+                                                <div class="comment">
+                                                    <p><strong>{{ reply.user ? reply.user.username : 'Utilisateur inconnu' }}</strong> <small class="text-muted">{{ reply.commentTime|date('Y-m-d') }}</small></p>
+                                                    <p>{{ reply.content }}</p>
+                                                </div>
+                                            {% endfor %}
                                         </div>
-                                    {% endfor %}
+                                    {% endif %}
+                                    <hr>
                                 </div>
                             {% endfor %}
                         {% else %}

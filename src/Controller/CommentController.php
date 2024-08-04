@@ -27,7 +27,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setUser($this->getUser());
             $comment->setDeal($deal);
-            $comment->setCommenttime(new \DateTime()); 
+            $comment->setCommenttime(new \DateTime());
 
             $entityManager->persist($comment);
             $entityManager->flush();
@@ -37,8 +37,7 @@ class CommentController extends AbstractController
             return $this->redirectToRoute('deal_show', ['id' => $deal->getId()]);
         }
 
-      
-        $comments = $commentRepository->findBy(['Deal' => $deal, 'parent' => null]);
+        $comments = $commentRepository->findBy(['deal' => $deal, 'parent' => null]);
 
         return $this->render('deal/show.html.twig', [
             'deal' => $deal,
@@ -69,7 +68,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $reply->setUser($this->getUser());
             $reply->setDeal($deal);
-            $reply->setCommenttime(new \DateTime()); 
+            $reply->setCommenttime(new \DateTime());
             $reply->setParent($comment);
 
             $entityManager->persist($reply);
@@ -87,3 +86,4 @@ class CommentController extends AbstractController
         ]);
     }
 }
+
