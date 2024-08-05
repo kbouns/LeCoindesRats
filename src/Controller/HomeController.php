@@ -114,4 +114,34 @@ class HomeController extends AbstractController
             'downvotes' => $downvotes,
         ]);
     }
+
+    #[Route('/best-deals', name: 'best_deals')]
+    public function bestDeals(Request $request, DealRepository $dealRepository, VoteRepository $voteRepository, PaginatorInterface $paginator): Response
+    {
+        $allDeals = $dealRepository->findAll();
+        $allDealsWithVotes = [];
+        foreach ($allDeals as $deal) {
+            $upvotes = $voteRepository->count(['deal' => $deal, 'typeVote' => 'upvote']);
+            $downvotes = $voteRepository->count(['deal' => $deal, 'typeVote' => 'downvote']);
+            $allDealsWithVotes[] = [
+                'deal' => $deal,
+                'upvotes' => $upvotes,
+                'downvotes' => $downvotes,
+            ];
+        }
+
+        usort($allDealsWithVotes, function ($a, $b) {
+            return $b['upvotes'] <=> $a['upvotes'];
+        });
+
+        $pagination = $paginator->paginate(
+            $allDealsWithVotes, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
+        return $this->render('home/best_deals.html.twig', [
+            'bestDeals' => $pagination,
+        ]);
+    }
 }
