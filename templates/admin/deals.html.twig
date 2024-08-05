@@ -43,7 +43,7 @@
                         <form method="post" action="{{ path('admin_toggle_publish', {'id': deal.id}) }}" style="display:inline-block;">
                             <input type="hidden" name="_token" value="{{ csrf_token('toggle_publish' ~ deal.id) }}">
                             <button type="submit" class="btn btn-sm {{ deal.isPublished ? 'btn-danger' : 'btn-success' }}">
-                                {{ deal.isPublished ? 'Toujours là' : 'Périmé' }}
+                                {{ deal.isPublished ? 'Non Publié' : 'Publié' }}
                             </button>
                         </form>
                     </td>

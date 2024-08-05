@@ -71,6 +71,7 @@ class HomeController extends AbstractController
         $bestDeals = array_slice($allDealsWithVotes, 0, 3);
 
         return $this->render('home/index.html.twig', [
+            'deals' => $pagination, // Cette ligne passe la variable deals à la vue
             'dealsWithVotes' => $dealsWithVotes,
             'bestDeals' => $bestDeals,
             'searchTerm' => $searchTerm,

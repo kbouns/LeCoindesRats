@@ -21,95 +21,98 @@
         </div>
 
         <div class="row">
-            <div class="col-12 col-lg-9">
+            <div class="col-12 col-lg-10">
                 {% for dealWithVotes in dealsWithVotes %}
                     {% set deal = dealWithVotes.deal %}
                     {% set upvotes = dealWithVotes.upvotes %}
                     {% set downvotes = dealWithVotes.downvotes %}
-                    <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="position: relative;">
-                        {% if deal.isActive == false %}
-                            <div class="ribbon">
-                                <span>Périmé</span>
-                            </div>
-                        {% endif %}
-                        <div class="row no-gutters">
-                            <div class="col-4 col-md-4">
-                                {% if deal.imageFilename %}
-                                    <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                        <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img img-fluid" style="height: 100%; object-fit: cover;">
-                                    </a>
-                                {% else %}
-                                    <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                        <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img img-fluid" style="height: 100%; object-fit: cover;">
-                                    </a>
-                                {% endif %}
-                            </div>
-                            <div class="col-8 col-md-8">
-                                <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
-                                    <div class="card-body p-1">
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
-                                                <input type="hidden" name="vote_type" value="upvote">
-                                                <button type="submit" class="btn btn-outline-success btn-sm">
-                                                    Bons Rats <span class="badge bg-light text-dark" id="upvotes-{{ deal.id }}">{{ upvotes }}</span>
-                                                </button>
-                                            </form>
-                                            <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
-                                                <input type="hidden" name="vote_type" value="downvote">
-                                                <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                    Mauvais Rats <span class="badge bg-light text-dark" id="downvotes-{{ deal.id }}">{{ downvotes }}</span>
-                                                </button>
-                                            </form>
-                                            <p class="card-text mb-1 date-section"><small class="text-muted">{{ deal.publicationdate|date('Y-m-d') }}</small></p>
-                                        </div>
-                                        <h5 class="card-title hover-bg-blue">{{ deal.title }}</h5>
-                                        <p class="card-text mb-1">{{ deal.description|length > 100 ? deal.description[:100] ~ '...' : deal.description }}</p>
-                                        <p class="card-text mb-1">
-                                            <span class="text-muted"><del>{{ deal.initialprice|number_format(2, ',', ' ') }} €</del></span>
-                                            <span class="text-danger">{{ deal.reduceprice|number_format(2, ',', ' ') }} €</span>
-                                        </p>
-                                        <p class="card-text mb-1 d-none d-md-block categories-section">
-                                            Catégories :
-                                            {% if deal.categorie|length > 0 %}
-                                                {% for category in deal.categorie %}
-                                                    <span class="badge bg-secondary">{{ category.nameCategory }}</span>
-                                                {% endfor %}
-                                            {% else %}
-                                                <span class="text-muted">Aucune catégorie</span>
-                                            {% endif %}
-                                        </p>
-                                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mt-2">
+                    
+                    {% if not deal.isPublished %}
+                        <div class="card mb-2 {{ deal.isActive == false ? 'inactive_card' : '' }}" style="position: relative;">
+                            {% if deal.isActive == false %}
+                                <div class="ribbon">
+                                    <span>Périmé</span>
+                                </div>
+                            {% endif %}
+                            <div class="row no-gutters">
+                                <div class="col-4 col-md-4">
+                                    {% if deal.imageFilename %}
+                                        <a href="{{ path('deal_show', {id: deal.id}) }}">
+                                            <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img img-fluid" style="height: 100%; object-fit: cover;">
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('deal_show', {id: deal.id}) }}">
+                                            <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img img-fluid" style="height: 100%; object-fit: cover;">
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="col-8 col-md-8">
+                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="text-decoration-none text-dark">
+                                        <div class="card-body p-1">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
+                                                    <input type="hidden" name="vote_type" value="upvote">
+                                                    <button type="submit" class="btn btn-outline-success btn-sm">
+                                                        Bons Rats <span class="badge bg-light text-dark" id="upvotes-{{ deal.id }}">{{ upvotes }}</span>
+                                                    </button>
+                                                </form>
+                                                <form class="d-inline vote-form" data-deal-id="{{ deal.id }}">
+                                                    <input type="hidden" name="vote_type" value="downvote">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                        Mauvais Rats <span class="badge bg-light text-dark" id="downvotes-{{ deal.id }}">{{ downvotes }}</span>
+                                                    </button>
+                                                </form>
+                                                <p class="card-text mb-1 date-section"><small class="text-muted">{{ deal.publicationdate|date('Y-m-d') }}</small></p>
+                                            </div>
+                                            <h5 class="card-title hover-bg-blue">{{ deal.title }}</h5>
+                                            <p class="card-text mb-1">{{ deal.description|length > 100 ? deal.description[:100] ~ '...' : deal.description }}</p>
                                             <p class="card-text mb-1">
-                                                {% if deal.user %}
-                                                    <span class="text-bold text-blue">{{ deal.user.username }}</span>
+                                                <span class="text-muted"><del>{{ deal.initialprice|number_format(2, ',', ' ') }} €</del></span>
+                                                <span class="text-danger">{{ deal.reduceprice|number_format(2, ',', ' ') }} €</span>
+                                            </p>
+                                            <p class="card-text mb-1 d-none d-md-block categories-section">
+                                                Catégories :
+                                                {% if deal.categorie|length > 0 %}
+                                                    {% for category in deal.categorie %}
+                                                        <span class="badge bg-secondary">{{ category.nameCategory }}</span>
+                                                    {% endfor %}
                                                 {% else %}
-                                                    <strong class="text-blue">Utilisateur inconnu</strong>
+                                                    <span class="text-muted">Aucune catégorie</span>
                                                 {% endif %}
                                             </p>
-                                            <div>
-                                                <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
-                                                <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-md-none">
-                                                    <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px;object-fit: contain;">
-                                                    <span class="d-inline">{{ deal.comments|length }}</span>
-                                                </a>
-                                                <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-none d-md-inline">
-                                                    <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px; object-fit: contain;">
-                                                    {{ deal.comments|length }} Commentaires
-                                                </a>
+                                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mt-2">
+                                                <p class="card-text mb-1">
+                                                    {% if deal.user %}
+                                                        <span class="text-bold text-blue">{{ deal.user.username }}</span>
+                                                    {% else %}
+                                                        <strong class="text-blue">Utilisateur inconnu</strong>
+                                                    {% endif %}
+                                                </p>
+                                                <div>
+                                                    <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
+                                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-md-none">
+                                                        <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px;object-fit: contain;">
+                                                        <span class="d-inline">{{ deal.comments|length }}</span>
+                                                    </a>
+                                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-none d-md-inline">
+                                                        <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px; object-fit: contain;">
+                                                        {{ deal.comments|length }} Commentaires
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% endfor %}
                 <div class="d-flex justify-content-center">
                     {{ knp_pagination_render(pagination) }}
                 </div>
             </div>
 
-            <div class="col-lg-3 d-none d-lg-block" id="rats-hot">
+            <div class="col-lg-2 d-none d-lg-block" id="rats-hot">
                 <h1>Rats + Hot</h1>
                 <div class="best-deals">
                     {% for bestDeal in bestDeals %}
@@ -119,11 +122,11 @@
                                 <div class="col">
                                     {% if deal.imageFilename %}
                                         <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                            <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 150px; object-fit: cover;">
+                                            <img src="{{ asset('uploads/images/' ~ deal.imageFilename) }}" alt="{{ deal.title }}" class="card-img" style="height: 150px; object-fit: contain;">
                                         </a>
                                     {% else %}
                                         <a href="{{ path('deal_show', {id: deal.id}) }}">
-                                            <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 120px; object-fit: cover;">
+                                            <img src="https://via.placeholder.com/150x100?text=No+Image" alt="{{ deal.title }}" class="card-img" style="height: 120px; object-fit: contain;">
                                         </a>
                                     {% endif %}
                                 </div>
@@ -212,6 +215,7 @@
             max-height: 15rem;
             min-height:3rem;
             width:100%;
+            object-fit: contain;
              
         }
         .flex-column {
@@ -251,6 +255,12 @@
         }
 
         @media (max-width: 992px) {
+            .card img {
+            max-height: 25rem;
+            min-height:2rem;
+            object-fit: contain;
+             
+        }
             #rats-hot {
                 display: none;
             }
@@ -281,6 +291,7 @@
             .d-inline .d-md-inline {
                 display: none !important;
             }
+            
         }
     </style>
 {% endblock %}

@@ -32,7 +32,9 @@ class ModeratorController extends AbstractController
     #[IsGranted('ROLE_MODERATOR')]
     public function manageDeals(DealRepository $dealRepository): Response
     {
+        // Récupérer tous les deals, qu'ils soient publiés ou non
         $deals = $dealRepository->findAll();
+
         return $this->render('moderator/deals.html.twig', ['deals' => $deals]);
     }
 
