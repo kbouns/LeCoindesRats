@@ -83,22 +83,22 @@
                                             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mt-2">
                                                 <p class="card-text mb-1">
                                                     {% if deal.user %}
-                                                        <class="text-bold text-blue">{{ deal.user.username }}</class>
+                                                        <strong class="text-blue">{{ deal.user.username }}</strong>
                                                     {% else %}
                                                         <strong class="text-blue">Utilisateur inconnu</strong>
                                                     {% endif %}
                                                 </p>
-                                                <div>
-                                                    <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
-                                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-md-none">
-                                                        <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px;object-fit: contain;">
-                                                        <span class="d-inline">{{ deal.comments|length }}</span>
-                                                    </a>
-                                                    <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-none d-md-inline">
-                                                        <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px; object-fit: contain;">
-                                                        {{ deal.comments|length }} Commentaires
-                                                    </a>
-                                                </div>
+                                                    <div>
+                                                        <a href="{{ deal.link }}" class="btn btn-primary btn-sm rounded-pill ms-auto" target="_blank">Voir le deal</a>
+                                                        <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-md-none">
+                                                            <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px; object-fit: contain;">
+                                                            <span class="d-inline d-md-none">{{ deal.comments|length }}</span>
+                                                        </a>
+                                                        <a href="{{ path('deal_show', {id: deal.id}) }}" class="btn btn-secondary btn-sm rounded-pill ms-2 d-none d-md-inline">
+                                                            <img src="{{ asset('images/conversation.png') }}" alt="Commentaires" style="height: 20px; width: 20px; object-fit: contain;">
+                                                            <span class="d-md-inline">{{ deal.comments|length }} Commentaires</span>
+                                                        </a>
+                                                    </div>
                                             </div>
                                         </div>
                                     </a>
@@ -255,11 +255,10 @@
 
         @media (max-width: 992px) {
             .card img {
-            max-height: 25rem;
-            min-height:2rem;
-            object-fit: contain;
-             
-        }
+                max-height: 25rem;
+                min-height:2rem;
+                object-fit: contain;
+            }
             #rats-hot {
                 display: none;
             }
@@ -270,10 +269,10 @@
             .d-md-none .d-md-inline {
                 display: none !important;
             }
-            .card-text{
+            .card-text {
                 font-size: 2em;
             }
-            .card-title{
+            .card-title {
                 font-size: 2em;
             }
             .categories-section {
@@ -290,7 +289,15 @@
             .d-inline .d-md-inline {
                 display: none !important;
             }
-            
+            .btn-secondary img {
+                display: none; /* Hide comment icon in mobile */
+            }
+            .btn-secondary .d-md-inline {
+        display: none; /* Cacher le texte pour les petits écrans */
+    }
+    .btn-secondary .d-md-none {
+        display: inline-block; /* Afficher uniquement l'icône pour les petits écrans */
+    }
         }
     </style>
 {% endblock %}
