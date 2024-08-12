@@ -26,11 +26,11 @@
                         <td>
                             {% for role in user.roles %}
                                 {% if role == 'ROLE_USER' %}
-                                    <span class="badge badge-primary">{{ role }}</span>
-                                {% elseif role == 'ROLE_ADMIN' %}
-                                    <span class="badge badge-success">{{ role }}</span>
+                                    <span style="color: #007bff;">{{ role }}</span> <!-- Bleu -->
+                                {% elseif role == 'ROLE_ADMIN' or 'ROLE_MODERATOR' %}
+                                    <span style="color: #dc3545;">{{ role }}</span> <!-- Rouge -->
                                 {% else %}
-                                    <span class="badge badge-secondary">{{ role }}</span>
+                                    <span style="color: #6c757d;">{{ role }}</span> <!-- Gris -->
                                 {% endif %}
                                 {% if not loop.last %}, {% endif %}
                             {% endfor %}
